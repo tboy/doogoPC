@@ -35,7 +35,7 @@ html,body{
 .rg1 .num1{
 	float:left;
 	width:50%;
-	margin-bottom: 20px;
+	margin-bottom: 30px;
 }
 
 .num1 div:nth-child(2){
@@ -49,7 +49,7 @@ html,body{
 .bottomBtns{
 	width:100%;
 	border-top:1px solid #e6e6e6;
-	margin-top: 400px;
+	margin-top: 430px;
 }
 
 .fn{

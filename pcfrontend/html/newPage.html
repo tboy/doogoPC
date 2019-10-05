@@ -439,7 +439,7 @@
 
 				<tr style="height:50px;">
 					<td>按钮文案</td>
-					<td><input type="text" id="btnTxt" onblur="cutTxt()" class="form_input_box frm_input" placeholder="请输入按钮文案" /></td>
+					<td><input type="text" id="btnTxt" onkeyup="cutTxt()" class="form_input_box frm_input" placeholder="请输入按钮文案" /></td>
 					<td id="txt">0/10</td>
 				</tr>
 				<script>
@@ -481,6 +481,7 @@
 						 $("#appPath").val("");
 						$("#btnTxt").val("");
 							$("#passState").hide();
+							$("#txt").html("0/10");
 						sortItem();
 						item.key = app.$data.myTools.length;
 						layer.closeAll();
