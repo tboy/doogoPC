@@ -1,0 +1,92 @@
+html,body{
+	padding: 0;
+	margin: 0;
+
+}
+
+.cnt{
+	width:95%;
+	margin:auto;
+	margin-top:1.5%;
+	font-size:14px;
+	color:#666;
+}
+
+.tp{
+	color:#007398;
+}
+.allTxt{
+	width:100%;
+	margin-top:20px;
+}
+.row{
+	width:50%;
+	float:left;
+}
+.row img{
+	float:left;
+	display:block;
+	margin-right:20px;
+}
+.row .rg1{
+	float:left;
+	width:80%;
+}
+.rg1 .num1{
+	float:left;
+	width:50%;
+	margin-bottom: 20px;
+}
+
+.num1 div:nth-child(2){
+	font-size:30px;
+	margin-bottom: 15px;
+}
+.num1 div:nth-child(3){
+	color:#b2b2b2;
+}
+
+.bottomBtns{
+	width:100%;
+	border-top:1px solid #e6e6e6;
+	margin-top: 400px;
+}
+
+.fn{
+	width:100%;
+}
+
+.fn .nc{
+	background: #f5f5f5;
+	float:left;
+	width:23%;
+	margin-right:2%;
+	height:80px;
+	margin-bottom:20px;
+}
+.fn .leftNc{
+	float:left;
+	padding-left:20px;
+	line-height: 20px;
+	margin-top:20px;
+}
+
+.leftNc div:nth-child(1){
+	color:#333;
+}
+.leftNc div:nth-child(2){
+	color:#999;
+}
+
+.ybtn{
+	margin-top:25px;
+	background: #ff8e50;
+	color:white;
+	width:60px;
+	text-align: center;
+	float:right;
+	margin-right:20px;
+	padding:5px 0;
+	border-radius: 5px;
+	cursor: pointer;
+	}

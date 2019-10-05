@@ -1,0 +1,67 @@
+
+.ct .sel{
+	    font-size: 12px;
+    margin: auto;
+    margin-top: 50px;
+    height: 100px;
+    width: 543px;
+}
+p.ggw {
+    display: block;
+    position: absolute;
+    top: 237px;
+    left: 203px;
+    font-size: 12px;
+}
+.sel p{
+	float:left;
+	display:block;
+	margin-left:100px;
+	margin-right:50px;
+}
+.selBtns{
+	float:left;
+
+	width:500px;
+	height:80px;
+	line-height:80px;
+	font-size:12px;
+	cursor: pointer;
+}
+.selBtns img{
+	padding-left:30px;
+	padding-top:16px;
+	padding-right:10px;
+	display:block;
+	float:left;
+}
+.selBtns .left{
+	float:left;
+	width:50%;
+	height:78px;
+}
+.selBtns .right{
+	float:right;
+	width:50%;
+	height:78px;
+}
+.unSel{
+	color:#aaa;
+	background-color: #eee;
+	border-top:1px solid #ccc;
+	border-right:1px solid #ccc;
+	border-bottom:1px solid #ccc;
+}
+.sels{
+	border:1px solid #007398;
+}
+.node{
+    background: #007398;
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 100%;
+    float: right;
+    margin-right: 10px;
+    margin-top: 10px;
+}

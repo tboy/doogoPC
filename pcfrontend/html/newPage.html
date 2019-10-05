@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>新建落地页</title>
+		<link rel="stylesheet" href="../css/bootstrap.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<link rel="stylesheet" href="../css/iframe.css">
+		<link rel="stylesheet" href="../css/jquery.pagination.css">
+		<link rel="stylesheet" href="../css/jquery-ui.css">
+		<link rel="stylesheet" href="../css/reset.css">
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/styles.css">
+		<link rel="stylesheet" href="../css/swiper.css">
+		<link rel="stylesheet" href="../css/myTaskCom.css">
+		<link rel="stylesheet" href="../css/myTask3.css">
+		<link rel="stylesheet" href="../css/myTask2.css">
+
+		<link rel="stylesheet" href="../css/number.css">
+
+		<link rel="stylesheet" href="../css/newPage.css">
+
+		<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+		<script src="../js/lib/layer.js"></script>
+		<script src="../js/drag-arrange.js"></script>
+	</head>
+	<body>
+		<div class="myContent" id="content">
+			<div class="top_title">新建落地页</div>
+
+
+			<div class="ct" style="height: auto;border: 0;margin-left:150px">
+
+
+				<div class="myCont" id="myCont">
+
+					<div class="row">
+						<label class="lb">落地页名称</label>
+						<div class="rg">
+							<input id="name" type="text" onkeyup="javascript:$('#name').val($('#name').val().substr(0,30))" style="border: 1px solid #eee;height: 30px;border-radius: 3px;  width: 306px;">
+
+						</div>
+					</div>
+
+					<div class="row">
+						<label class="lb">推广目标</label>
+						<div class="rg">
+							<ul class="nav2">
+								<li id="1" class="btnActive sel">
+									<span></span>
+									<img src="../images/tg1.png" />
+									<span>品牌活动</span>
+								</li>
+								<li id="2" class="btnActive">
+									<span></span>
+									<img src="../images/tg2.png" />
+									<span>收集销售线索</span>
+								</li>
+								<li id="3" class="btnActive">
+									<span></span>
+									<img src="../images/tg3.png" style=" margin-left: 26px;" />
+									<span>派发优惠券</span>
+								</li>
+								<li id="4" class="btnActive">
+									<span></span>
+									<img style="margin-top:17px;" src="../images/genre-icon4.png" />
+									<span>会员营销</span>
+								</li>
+								<li>
+									<span></span>
+									<img src="../images/tg44.png" />
+									<span>公众号推广</span>
+								</li>
+								<li>
+									<span></span>
+									<img src="../images/tg55.png" />
+									<span>门店推广</span>
+								</li>
+
+							</ul>
+						</div>
+					</div>
+
+					<div id="xs" style="display:none;">
+
+						<div class="row">
+							<label class="lb">图片</label>
+							<div class="rg" style="width:600px;">
+								<template v-for="(img,idx1) in imgs">
+									<div class="imgs">
+										<img :src="img.src" class="imgs" />
+										<br>
+										<a :href="'javascript:del('+idx1+')'" style="text-align: center;width: 100%;display: block;">刪除</a>
+									</div>
+								</template>
+								<div>
+									<img src="../images/flie.png" onClick="upFile();" />
+									<input type="file" accept="image/*" id="file" style="display:none">
+								</div>
+								<br>
+								<div class="col_9" style="margin-top:15px;">图片宽度要求是750px，高度不超过1536像素，大小不超过300KB，支持PNG,JPG,JPEG,不支持GIF格式</div>
+
+							</div>
+						</div>
+						<div class="row">
+							<label class="lb">表单</label>
+							<div class="rg">
+								<template v-for="(item,idx1) in fp" v-cloak>
+									<div class="prow">
+										<input type="text" v-model="item.val" :onblur="item.val=item.val.substr(0,6)" placeholder="自定义内容" :id="idx1"
+										 style="border: 1px solid #eee;height: 30px;border-radius: 3px;  width: 306px;">
+										<span :onClick="'delH('+idx1+');'" style="cursor: pointer;">删除</span>
+										<template v-if="idx1==0 && fp.length>1">
+											<span :onClick="'downH('+idx1+');'" style="cursor: pointer;">下移</span>
+										</template>
+										<template v-if="idx1>0 && idx1!=fp.length-1">
+											<span :onClick="'upH('+idx1+');'" style="cursor: pointer;">上移</span>
+											<span :onClick="'downH('+idx1+');'" style="cursor: pointer;">下移</span>
+										</template>
+										<template v-if="idx1>0 && idx1==fp.length-1">
+											<span :onClick="'upH('+idx1+');'" style="cursor: pointer;">上移</span>
+										</template>
+									</div>
+								</template>
+								<a href="javascript:addProp();" class="form_btn_a1 voice-layer-btn-a1" style=" width: 306px;
+					margin-top: 10px;">添加表单内容</a>
+							</div>
+						</div>
+
+						<div class="row">
+							<label class="lb">按钮文案</label>
+							<div class="rg">
+								<input value="提交" type="text" onkeyup="javascript:$('#txt2').val($('#txt2').val().substr(0,10))" id='txt2'
+								 style="  border: 1px solid #eee;height: 30px;border-radius: 3px;  width: 306px;">
+
+							</div>
+						</div>
+
+						<div class="row">
+							<label class="lb">按钮颜色</label>
+							<div class="rg cl">
+								<div><label class="checkbox_box"><input type="checkbox" name="type2" value="0"><span class="r1"></span></label></div>
+								<div><label class="checkbox_box"><input type="checkbox" name="type2" value="1"><span class="r2"></span></label></div>
+								<div><label class="checkbox_box"><input type="checkbox" name="type2" value="2"><span class="r3"></span></label></div>
+								<div><label class="checkbox_box"><input type="checkbox" name="type2" value="3"><span class="r4"></span></label></div>
+								<div><label class="checkbox_box"><input type="checkbox" name="type2" value="4"><span class="r5"></span></label></div>
+
+							</div>
+						</div>
+					</div>
+
+					<div id="yhj" style="display:none;">
+						<div class="row">
+							<label class="lb">图片</label>
+							<div class="rg" style="width:600px;">
+								<template v-for="(img,idx1) in imgs">
+									<div class="imgs">
+										<img :src="img.src" class="imgs" />
+										<br>
+										<a :href="'javascript:del('+idx1+')'" style="text-align: center;width: 100%;display: block;">刪除</a>
+									</div>
+								</template>
+								<div>
+									<img src="../images/flie.png" onClick="upFile();" />
+									<input type="file" accept="image/*" id="file" style="display:none">
+								</div>
+								<br>
+								<div class="col_9" style="margin-top:15px;">图片宽度要求是750px，高度不超过1536像素，大小不超过300KB，支持PNG,JPG,JPEG,不支持GIF格式</div>
+
+							</div>
+						</div>
+						<div class="row">
+							<label class="lb">优惠券</label>
+							<div class="rg">
+								<a href="javascript:showCard();" class="form_btn_a1 voice-layer-btn-a1">选择</a>
+								<br>
+								<template v-for="(item,idx1) in card" v-cloak>
+									<span style="margin-top:15px;">{{item.title}} &nbsp;<a :href="'javascript:delCard('+item.id+');'">删除</a></span>
+									<br>
+								</template>
+							</div>
+						</div>
+
+						<div class="row">
+							<label class="lb">按钮文案</label>
+							<div class="rg">
+								<input value="提交" type="text" onkeyup="javascript:$('#txt1').val($('#txt1').val().substr(0,10))" id="txt1"
+								 style="  border: 1px solid #eee;height: 30px;border-radius: 3px;  width: 306px;">
+
+							</div>
+						</div>
+						<div class="row">
+							<label class="lb">按钮颜色</label>
+							<div class="rg cl">
+								<div><label class="checkbox_box"><input type="checkbox" name="type" value="0"><span class="r1"></span></label></div>
+								<div><label class="checkbox_box"><input type="checkbox" name="type" value="1"><span class="r2"></span></label></div>
+								<div><label class="checkbox_box"><input type="checkbox" name="type" value="2"><span class="r3"></span></label></div>
+								<div><label class="checkbox_box"><input type="checkbox" name="type" value="3"><span class="r4"></span></label></div>
+								<div><label class="checkbox_box"><input type="checkbox" name="type" value="4"><span class="r5"></span></label></div>
+
+							</div>
+						</div>
+					</div>
+					<div id="hyyx" style="display:none;">
+
+						<div class="number-item">
+							<span class="name flex flexAtcent">外层文案</span>
+							<div class="content">
+								<textarea name="" maxlength="40" v-model="outTxt" :onblur="'javascript:'+outTxt.substring(0,40)"></textarea>
+								<div class="count"><span>{{outTxt.length}}</span>/40</div>
+							</div>
+						</div>
+						<div class="number-item">
+							<span class="name flex flexAtcent">外层图片</span>
+							<div class="content">
+								<div class="upload flex flexAtcent flexJcent">
+									<div class="pic flex flexAtcent flexJcent"><img style="width:80px;height:80px;" :src="outImg == ''?'../images/upload-pic.png':outImg"
+										 alt="" onClick="upFile(888)"></div>
+								</div>
+								<div class="upload-explain">
+									<p>800*800像素，大小要求在300KB以内，</p>
+									<p>支持PNG格式和JPG格式，其中文字占图片篇幅不超过30%</p>
+								</div>
+							</div>
+						</div>
+						<div class="number-item">
+							<span class="name flex flexAtcent">自定义控件</span>
+							<div class="content">
+								<div class="dd" id="nestable3">
+									<ol class="dd-list">
+										<li class="dd-item dd3-item" data-id="18">
+											<select class="addSelect" onChange='addItem();'>
+												<option value="0">添加控件</option>
+												<option value="2">图片</option>
+												<option value="1">文本</option>
+												<option value="3">优惠券</option>
+												<option value="4">占位</option>
+												<option value="5">进入小程序</option>
+											</select>
+										</li>
+										<li>
+											<ul id="gab" style="margin-top:20px;">
+												<template v-for="(item,index) in myTools" v-cloak>
+
+													<template v-if="item.type == 1" v-cloak>
+														<li class="item dd-item dd3-item" :idx="index" data-id="15">
+
+															<div class="upload-item flex">
+																<textarea type="text" style="width:260px;" maxlength="300" v-model="item.val" @blur="item.val.substring(0,300)"></textarea>
+																<div class="count" style="left: 265px;">
+																	<span>{{item.val.length}}</span>/300
+																</div>
+																<div class="dd-handle dd3-handle">
+																	<img src="../images/handle-icon.png" draggable="false" alt="">
+																</div>
+																<div class="delete" :onClick="'javascript:app.$data.myTools.splice('+index+',1);'">
+																	<img src="../images/delete-icon.png" alt="">
+																</div>
+																<select class="modalitySelect" v-model="item.sel">
+																	<option value="1">标题-大</option>
+																	<option value="2">标题-小</option>
+																	<option value="3">正文-大</option>
+																	<option value="4">正文-小</option>
+																</select>
+															</div>
+														</li>
+													</template>
+
+													<template v-if="item.type == 2" v-cloak>
+														<li class="item dd-item dd3-item" :idx="index" data-id="14">
+
+															<div class="upload-item flex">
+																<div class="upload flex flexAtcent flexJcent">
+																	<div class="pic flex flexAtcent flexJcent" :onClick="'upFile('+index+')'">
+																		<img style="width:80px;height:80px;" :src="item.src==''?'../images/upload-pic.png':item.src" alt=""></div>
+																</div>
+																<div class="dd-handle dd3-handle"><img draggable="false" src="../images/handle-icon.png" alt=""></div>
+																<div class="delete" :onClick="'javascript:app.$data.myTools.splice('+index+',1);'">
+																	<img src="../images/delete-icon.png" alt=""></div>
+
+															</div>
+															<div class="upload-explain">
+																<p>图片宽度要求是750px，高度不超过1536像素，</p>
+																<p>大小不超过300KB，支持PNG,JPG,JPEG,不支持GIF格式</p>
+															</div>
+														</li>
+													</template>
+
+													<template v-if="item.type == 3" v-cloak>
+														<li class="item dd-item dd3-item" :idx="index" data-id="16">
+
+															<div class="upload-item flex">
+																<div class="select-kaquan">{{item.vo.title}}</div>
+																<div class="dd-handle dd3-handle"><img draggable="false" src="../images/handle-icon.png" alt=""></div>
+																<div class="delete" :onClick="'javascript:app.$data.myTools.splice('+index+',1);'"><img src="../images/delete-icon.png"
+																	 alt=""></div>
+																<select class="modalitySelect" v-model="item.sel">
+																	<option value="1">红色</option>
+																	<option value="2">绿色</option>
+																	<option value="3">黄色</option>
+																</select>
+
+															</div>
+														</li>
+													</template>
+
+													<template v-if="item.type == 4" v-cloak>
+														<li class="item dd-item dd3-item" :idx="index" data-id="17">
+
+															<div class="upload-item flex">
+																<input type="number" :onblur="'javascript:'+(item.val=item.val<0?0:(item.val>500?500:item.val))"
+																 v-model="item.val" placeholder="输入间距高度" maxlength="500">
+																<div class="dd-handle dd3-handle"><img draggable="false" src="../images/handle-icon.png" alt=""></div>
+																<div class="delete" :onClick="'javascript:app.$data.myTools.splice('+index+',1);'"><img src="../images/delete-icon.png"
+																	 alt=""></div>
+															</div>
+														</li>
+													</template>
+
+<template v-if="item.type == 5" v-cloak>
+														<li class="item dd-item dd3-item" :idx="index" data-id="15">
+
+															<div class="upload-item flex">
+																<div class="select-kaquan">{{item.titl}}</div>
+																
+																<div class="dd-handle dd3-handle">
+																	<img src="../images/handle-icon.png" draggable="false" alt="">
+																</div>
+																<div class="delete" :onClick="'javascript:app.$data.myTools.splice('+index+',1);'">
+																	<img src="../images/delete-icon.png" alt="">
+																</div>
+																
+															</div>
+														</li>
+													</template>
+												</template>
+											</ul>
+										</li>
+									</ol>
+								</div>
+							</div>
+						</div>
+						<div class="number-item">
+							<span class="name flex flexAtcent">获取用户信息</span>
+							<div class="content flex flexAtcent">
+								<div class="item-select flex">
+									<div>
+
+										<input style="border-radius: 0;" id="showName" type="checkbox" checked="checked">&nbsp;昵称，头像，地区，性别&nbsp;&nbsp;</div>
+									<div><input style="border-radius: 0;" id="showArea" type="checkbox">&nbsp;地理位置&nbsp;&nbsp;</div>
+									<div><input style="border-radius: 0;" id="showPhone" type="checkbox" checked="checked">&nbsp;手机号码</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+			<a href="javascript:next();" class="btn_input_b2" style="margin-left: 332px;margin-bottom: 200px;">提交</a>
+
+
+
+
+		</div>
+
+
+		<div class="setting-layer left-setting-layer" style="width: 680px; height: 380px; display: none;" id="voice-layer-content-a2">
+			<div class="pop_p15">
+				<p style="margin: 5px;"><span class="form_input_box"><input type="text" id="groupName" class="frm_input"
+						 placeholder="优惠券名称"></span>
+					&nbsp;<a href="javascript:searchHandle();" class="btn_input_b1" style="border:0;background:#f1f1f1;">搜索</a></p>
+				<div class="cardList-table">
+					<table class="table active" id="card">
+						<thead>
+							<tr>
+								<th width="30">&nbsp;</th>
+								<th>优惠券名称</th>
+								<th>优惠券类型</th>
+								<th>优惠券有效期</th>
+							</tr>
+						</thead>
+						<tbody>
+							<template v-for="(item,idx1) in arrs" v-cloak>
+								<tr style="height:35px;">
+
+									<td><input type="checkbox" class="cbs2" :checked="item.isSel" :id="item.id" onchange="changeHandel2();"></td>
+									<td>{{item.title}}</td>
+									<td>{{item.type}}</td>
+									<td>{{item.time}}</td>
+
+								</tr>
+							</template>
+							<tr>
+								<td colspan="4">
+									<a href="javascript:myCard.$data.arrs=g1;">1</a>
+									<a href="javascript:myCard.$data.arrs=g2;">2</a>
+									<a href="javascript:myCard.$data.arrs=g3;">3</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="clearfix btn_input_b_box">
+					<a href="javascript:layer.closeAll();" class="btn_input_b1">取消</a><a href="javascript:addCard();" class="btn_input_b2">确定</a>
+				</div>
+			</div>
+		</div>
+		<!--小程序-->
+
+		<div class="setting-layer left-setting-layer" style="width: 450px; height: 221px;padding:10px;display: none;" id="app2">
+			<table>
+				<tr style="height:20px;">
+					<td style="width:60px;">小程序</td>
+					<td><input type="text" id="appId" class="form_input_box frm_input" placeholder="请输入小程序原始ID" /></td>
+					<td><a href="javascript:checkAppId();" class="btn_input_b1" style="border:0;background:#f1f1f1;">校验</a></td>
+				</tr>
+				<tr style="display: none;height:30px;" id="passState">
+					<td></td>
+					<td>道古科技 <span id="state">通过</span></td>
+					<td></td>
+				</tr>
+
+
+				<tr style="height:20px;">
+					<td></td>
+					<td><input type="text" id="appPath" class="form_input_box frm_input" placeholder="请输入小程序页面路径" /></td>
+					<td></td>
+				</tr>
+				<tr style="height:30px;">
+					<td></td>
+					<td colspan="2" style="color:#999;">填写点击后跳转的小程序中的页面路径</td>
+
+				</tr>
+
+				<tr style="height:50px;">
+					<td>按钮文案</td>
+					<td><input type="text" id="btnTxt" onblur="cutTxt()" class="form_input_box frm_input" placeholder="请输入按钮文案" /></td>
+					<td id="txt">0/10</td>
+				</tr>
+				<script>
+					function cutTxt() {
+						var txt = $("#btnTxt").val().substr(0, 10);
+						$("#btnTxt").val(txt);
+						$("#txt").html(txt.length + "/10");
+					}
+
+					function showApp() {
+						layer.open({
+							type: 1,
+							title: '进入小程序',
+							skin: 'layui-layer-demo',
+							closeBtn: 1,
+							area: ['450px', '300px'],
+							content: $('#app2')
+						});
+
+					}
+
+					function checkAppId() {
+						$("#passState").show();
+						$("#appId").val();
+						$("#state").html("通过");
+						$("#state").css("color", "#009500");
+						// 			
+						// 			$("#state").html("不通过");
+						// 			$("#state").css("color","red");
+					}
+
+					function addApp() {
+						var item = {};
+						item.type = "5";
+						item.appId = $("#appId").val();
+						item.path = $("#appPath").val();
+						item.titl = $("#btnTxt").val();
+						 $("#appId").val("");
+						 $("#appPath").val("");
+						$("#btnTxt").val("");
+							$("#passState").hide();
+						sortItem();
+						item.key = app.$data.myTools.length;
+						layer.closeAll();
+					
+						app.$data.myTools.push(item);
+						setTimeout(function() {
+							sortViewItem();
+							$('.item').arrangeable();
+						}, 10);
+					}
+				</script>
+			</table>
+
+			<div style="width: 180px; margin: auto;">
+				<a href="javascript:layer.closeAll();" class="btn_input_b1">取消</a>
+				<a href="javascript:addApp();" class="btn_input_b2">确定</a>
+			</div>
+		</div>
+
+
+</html>
+
+
+<style>
+	.row_re {
+		margin-left: 150px;
+	}
+
+	.layui-layer {
+		padding: 0px !important;
+	}
+
+	input[type="checkbox"] {
+		-webkit-appearance: none;
+		vertical-align: middle;
+		margin-top: 0;
+		background: #fff;
+		border: #999 solid 1px;
+		border-radius: 100%;
+		min-height: 12px;
+		min-width: 12px;
+		width: auto;
+		height: auto;
+	}
+
+	input[type="checkbox"]:checked {
+		background: #3190e8;
+	}
+
+	input[type=checkbox]:checked::after {
+		content: '';
+
+		position: absolute;
+		background: transparent;
+		border: #fff solid 2px;
+		border-top: none;
+		border-right: none;
+		height: 6px;
+		width: 10px;
+		-moz-transform: rotate(-45deg);
+		-ms-transform: rotate(-45deg);
+		-webkit-transform: rotate(-45deg);
+		transform: rotate(-45deg);
+	}
+</style>
+<script src="../js/vue.js"></script>
+<script src="../js/UploadBase64.js"></script>
+<script src="../js/layer/layer.js"></script>
+<script src="../js/newPage.js"></script>
+<script>
+	function addItem() {
+
+
+		var item = {};
+		item.type = $('.addSelect').val();
+		if (item.type == '0') return;
+		$('.addSelect').val(0);
+		if (item.type == '1') {
+			item.val = '';
+			item.sel = '2'
+		}
+		if (item.type == '2') {
+			item.src = '';
+		}
+
+		if (item.type == '3') {
+			showCard(1);
+			return;
+		}
+
+		if (item.type == '4') {
+			item.val = '';
+		}
+
+		if (item.type == '5') {
+			showApp();
+			return;
+		}
+		sortItem();
+		item.key = app.$data.myTools.length;
+		app.$data.myTools.push(item);
+		setTimeout(function() {
+			sortViewItem();
+			$('.item').arrangeable();
+
+
+		}, 10);
+	}
+
+	function sortViewItem() {
+		var arr = [];
+		$('.item').each(function() {
+			arr[parseInt($(this).attr("idx"))] = $(this);
+			$(this).remove();
+		});
+
+		for (var i = 0; i < arr.length; i++) {
+			$("#gab").append(arr[i]);
+		}
+
+	}
+
+	function sortItem() {
+		var arr = [];
+		$(".item").each(function() {
+			arr.push(app.$data.myTools[parseInt($(this).attr("idx"))]);
+		});
+		app.$data.myTools.splice(0, app.$data.myTools.length);
+
+
+		for (var i = 0; i < arr.length; i++) {
+			arr[i].key = i;
+			app.$data.myTools.push(arr[i]);
+		}
+
+	}
+
+	function next() {
+		//落地页名称
+		var name = $("#name").val();
+		//第一個顔色值
+		var color1 = cbVal("type");
+		//第一個顔色值
+		var color2 = cbVal("type2");
+		//推广目标
+		type;
+		//上傳圖片
+		app.$data.imgs;
+		//卡卷
+		app.$data.card;
+		//按鈕文案
+		$("#txt1").val();
+		//表单
+		app.$data.fp;
+		//按钮文案2
+		$("#txt2").val();
+
+
+		//外层文案
+		app.$data.outTxt;
+		//外出图片
+		app.$data.outImg;
+		//自定义控件
+		app.$data.myTools;
+
+		//
+		$("#showName").is(':checked');
+		$("#showArea").is(':checked');
+		$("#showPhone").is(':checked');
+
+	}
+	//再营销選擇
+	function cbVal(name) {
+		var str = "";
+		$("input:checkbox[name='" + name + "']").each(function(i) {
+
+			var val = $(this).val();
+			if ($(this).prop('checked')) {
+				if (str == "") {
+					str = val;
+				} else {
+					str = str + "," + val;
+				}
+			}
+
+
+		});
+		return str;
+	}
+
+	function del(val) {
+		app.$data.imgs.splice(val, 1);
+	}
+	var toolImgIdx = -1;
+
+	function upFile(val) {
+
+		if (val != undefined) {
+			toolImgIdx = val;
+			if (val == 888) {
+				u.isMatch800_800 = true;
+
+				u.isMatch750_1536 = false;
+			} else {
+				u.isMatch800_800 = false;
+
+				u.isMatch750_1536 = true;
+			}
+		} else if (app.$data.imgs.length == 5) {
+			alert("只能上传5张");
+			return;
+		} else {
+			u.isMatch800_800 = false;
+
+			u.isMatch750_1536 = true;
+		}
+		$('#file').trigger('click');
+	}
+</script>

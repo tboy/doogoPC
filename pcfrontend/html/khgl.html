@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>客户管理</title>
+	
+				<link rel="stylesheet" href="../css/bootstrap.css">
+				<link rel="stylesheet" href="../css/common.css">
+				<link rel="stylesheet" href="../css/iframe.css">
+				<link rel="stylesheet" href="../css/jquery.pagination.css">
+				<link rel="stylesheet" href="../css/jquery-ui.css">
+				<link rel="stylesheet" href="../css/reset.css">
+				<link rel="stylesheet" href="../css/style.css">
+				<link rel="stylesheet" href="../css/styles.css">
+				<link rel="stylesheet" href="../css/swiper.css">
+
+				<link rel="stylesheet" href="../css/number.css">
+					<link rel="stylesheet" type="text/css" href="../css/khgl.css" />
+				
+		<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+		    <script src="../js/lib/layer.js"></script>
+	</head>
+	<body>
+		<div class="cnt">
+			<div class="datNum">
+				<div class="ret">
+					<div>13213,123</div>
+					<div>客户总数</div>
+				</div>
+				<div class="ret">
+					<div>13213,123</div>
+					<div>会员总数</div>
+				</div>
+				<div class="ret">
+					<div>13213,123</div>
+					<div>陌生客户总数</div>
+				</div>
+				<div class="ret">
+					<div>13%</div>
+					<div>会员占比</div>
+				</div>
+				<div class="ret">
+					<div>1.3年</div>
+					<div>生命周期</div>
+				</div>
+				<div class="ret">
+					<div>1321元</div>
+					<div>终身价值</div>
+				</div>
+				<div class="ret">
+					<div>1321元</div>
+					<div>客单价</div>
+				</div>
+				<div class="ret">
+					<div>1.3/月</div>
+					<div>消费频次</div>
+				</div>
+				<div class="ret">
+					<div>13%</div>
+					<div>复购率</div>
+				</div>
+
+			</div>
+			<div style="border-top:2px solid #ccc;width:102.5%;margin-bottom: 20px;"></div>
+			<div class="sech">
+				<div class="bBtn" onclick="showPanel();">批量导入</div>
+				<table class="stbl">
+					<tr>
+						<td>
+							终身价值
+							<select class="sel" id="zsjz">
+								<option value=''></option>
+								<option value=1>1</option>
+								<option value=1>2</option>
+								<option value=1>3</option>
+							</select>
+						</td>
+						<td>
+							生命周期
+							<select class="sel" id="smzq">
+								<option value=''></option>
+								<option value=1>1</option>
+								<option value=1>2</option>
+								<option value=1>3</option>
+							</select>
+						</td>
+						<td>
+							成长阶段
+							<select class="sel" id="ccjd">
+								<option value=''></option>
+								<option value=1>1</option>
+								<option value=1>2</option>
+								<option value=1>3</option>
+							</select>
+						</td>
+						<td>
+							消费金额
+							<select class="sel" id="xfje">
+								<option value=''></option>
+								<option value=1>1</option>
+								<option value=1>2</option>
+								<option value=1>3</option>
+							</select>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							消费贡献
+							<select class="sel" id="xfgx">
+								<option value=''></option>
+								<option value=1>1</option>
+								<option value=1>2</option>
+								<option value=1>3</option>
+							</select>
+						</td>
+
+
+
+						<td>
+							<span style=" width: 14px; height: 10px; display: block; float: left; "></span>购买力
+							<select class=" sel" id="gml">
+								<option value=''></option>
+								<option value=1>1</option>
+								<option value=1>2</option>
+								<option value=1>3</option>
+							</select>
+						</td>
+						<td>
+							<span style=" width: 14px; height: 10px; display: block; float: left; "></span>活跃度
+							<select class="sel" id="hyd">
+								<option value=''></option>
+								<option value=1>1</option>
+								<option value=1>2</option>
+								<option value=1>3</option>
+							</select>
+						</td>
+						<td>
+							<span style=" width: 14px; height: 10px; display: block; float: left; "></span>忠诚度
+							<select class="sel" id="zcd">
+								<option value=''></option>
+								<option value=1>1</option>
+								<option value=1>2</option>
+								<option value=1>3</option>
+							</select>
+						</td>
+
+
+					</tr>
+
+					<tr>
+						<td>
+							商品喜好
+							<select class="sel" id="spxh">
+								<option value=''></option>
+								<option value=1>1</option>
+								<option value=1>2</option>
+								<option value=1>3</option>
+							</select>
+						</td>
+
+						<td>
+							品类喜好
+							<select class="sel" id="plxh">
+								<option value=''></option>
+								<option value=1>1</option>
+								<option value=1>2</option>
+								<option value=1>3</option>
+							</select>
+						</td>
+
+						<td>
+							品牌喜好
+							<select class="sel" id="plxh">
+								<option value=''></option>
+								<option value=1>1</option>
+								<option value=1>2</option>
+								<option value=1>3</option>
+							</select>
+						</td>
+						<td>
+							特色喜好
+							<select class="sel" id="tsxh">
+								<option value=''></option>
+								<option value=1>1</option>
+								<option value=1>2</option>
+								<option value=1>3</option>
+							</select>
+						</td>
+					</tr>
+
+
+					<tr>
+						<td>
+							<span style=" width: 80px; height: 40px; display: block; float: left; "></span>
+							<div onclick="submitHandle();" class="bBtn" style=" float: left;">筛选</div>
+							<div onClick="clearCon();" style="color:#007398;line-height: 27px;cursor: pointer;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;清空筛选条件</div>
+						</td>
+						<td></td>
+						<td></td>
+						<td></td>
+
+					</tr>
+				</table>
+			</div>
+
+			<div onclick="searchPanel();" style="width:80px;margin:10px auto;cursor: pointer;font-size:12px;color:#000;">
+				<span id="txtsw">收起</span><img id='icd' src="../images/up.jpg" style="display: block;float: right;margin-right: 29px;" />
+			</div>
+			<style>
+				.bbt tr td {
+					border-bottom: 1px solid #f1f1f1;
+				}
+			</style>
+
+			<table class="bbt" cellspacing="0" cellpadding="0" style="line-height:40px;width:100%;text-align: center;">
+				<tr style="background-color: #f1f1f1;height:40px;">
+					<td>编号</td>
+					<td>姓名</td>
+					<td>手机号码</td>
+					<td style="color:#007398">终身价值</td>
+					<td style="color:#007398">生命周期 ↓</td>
+					<td style="color:#007398">成长阶段</td>
+					<td style="color:#007398">购买力</td>
+					<td style="color:#007398">活跃度</td>
+					<td>偏好标签</td>
+					<td>操作</td>
+				</tr>
+				<tr style="height:50px;border-bottom: 1px solid #f1f1f1;">
+					<td>4234</td>
+					<td style="color:#007398">林爹爹</td>
+					<td>12345678901</td>
+					<td>123</td>
+					<td>2月</td>
+					<td>成熟型</td>
+					<td>1级</td>
+					<td>1级</td>
+					<td>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+
+
+					</td>
+
+					<td>
+						<a style="color:#007398;text-decoration: none;" href="javascript:void(0)">查看详情</a>
+					</td>
+				</tr>
+
+				<tr style="height:50px;border-bottom: 1px solid #f1f1f1;">
+					<td>4234</td>
+					<td style="color:#007398">林爹爹</td>
+					<td>12345678901</td>
+					<td>123</td>
+					<td>2月</td>
+					<td>成熟型</td>
+					<td>1级</td>
+					<td>1级</td>
+					<td>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+				
+				
+					</td>
+				
+					<td>
+						<a style="color:#007398;text-decoration: none;" href="javascript:void(0)">查看详情</a>
+					</td>
+				</tr>
+				<tr style="height:50px;border-bottom: 1px solid #f1f1f1;">
+					<td>4234</td>
+					<td style="color:#007398">林爹爹</td>
+					<td>12345678901</td>
+					<td>123</td>
+					<td>2月</td>
+					<td>成熟型</td>
+					<td>1级</td>
+					<td>1级</td>
+					<td>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+				
+				
+					</td>
+				
+					<td>
+						<a style="color:#007398;text-decoration: none;" href="javascript:void(0)">查看详情</a>
+					</td>
+				</tr>
+				<tr style="height:50px;border-bottom: 1px solid #f1f1f1;">
+					<td>4234</td>
+					<td style="color:#007398">林爹爹</td>
+					<td>12345678901</td>
+					<td>123</td>
+					<td>2月</td>
+					<td>成熟型</td>
+					<td>1级</td>
+					<td>1级</td>
+					<td>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+				
+				
+					</td>
+				
+					<td>
+						<a style="color:#007398;text-decoration: none;" href="javascript:void(0)">查看详情</a>
+					</td>
+				</tr>
+				<tr style="height:50px;border-bottom: 1px solid #f1f1f1;">
+					<td>4234</td>
+					<td style="color:#007398">林爹爹</td>
+					<td>12345678901</td>
+					<td>123</td>
+					<td>2月</td>
+					<td>成熟型</td>
+					<td>1级</td>
+					<td>1级</td>
+					<td>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
+				
+				
+					</td>
+				
+					<td>
+						<a style="color:#007398;text-decoration: none;" href="javascript:void(0)">查看详情</a>
+					</td>
+				</tr>
+			</table>
+			
+			<div style="text-align: right;margin:20px 0px;color:#000;">共2页&nbsp;&nbsp;&nbsp;每页20条</div>
+		</div>
+		
+		<div class="setting-layer left-setting-layer" style="display:none;padding:20px;width: 419px; height: 300px;font-size:14px;color:#666;" id="panel">
+			<div style="height: 30px;">
+			<span style="border:1px solid #c0c0c0;border-radius: 3px;padding:5px 20px;margin-right:10px;">上传文件</span><span style="color:#009944">文件.csv</span>
+			<input type="file" name="file" style="
+			    width: 212px;
+			    padding: 0;
+			    margin: 0;
+			    opacity: 0;
+			    margin-top: -20px;
+			"/>
+			</div>
+			
+			<div style="margin-bottom: 40px;line-height: 20px;">当前仅支持csv格式文件（大小在10M以内），请使用Office 2010及以上版本，否则可能出现乱码必须严格按照模板内容填入客户数据，否则可能会出现导入异常</div>
+			<a href="javascript:void(0);" style="color:#007398;text-decoration: none;">下载文件模板</a>
+			<div style="color:#b2b2b2;margin-top:10px;">文件模板数据不满足需求，请联系我们</div>
+		
+		<div style="margin-top:40px; margin-left: 100px;">
+			<a href="javascript:layer.closeAll();" class="btn_input_b1">取消</a><a href="javascript:upFile();" class="btn_input_b2">确定</a>
+		</div>
+		</div>
+	</body>
+</html>
+<script type="text/javascript">
+	//批量导入
+	function showPanel(){
+		
+			layer.open({
+			type: 1,
+			title: '批量导入',
+			skin: 'layui-layer-demo',
+			closeBtn: 1,
+			area: ['auto'],
+			content: $('#panel')
+		});
+	}
+	
+	function upFile(){
+		$("#file");
+		layer.closeAll();
+	}
+	//查询
+	function submitHandle(){
+		var pars = {};
+		$(".sel").each(function(){
+			var key = $(this).attr("id");
+			var val = $(this).val();
+			pars[key] = val;
+		});
+		console.log(pars);
+	}
+	//清空条件
+	function clearCon(){
+		$(".sel").each(function(){
+		
+			var val = $(this).val("");
+		});
+	}
+	//是否显示搜索条件
+	function searchPanel(){
+		if($(".sech").css("display")=="none"){
+			$(".sech").show();
+			$("#icd").attr("src","../images/up.jpg");
+				$("#icd").css("margin-top","0px");
+			$("#txtsw").html("收起")
+		}else{
+			$(".sech").hide();
+			$("#txtsw").html("打开")
+			$("#icd").attr("src","../images/down.jpg");
+			$("#icd").css("margin-top","-5px");
+		}
+	}
+</script>

@@ -1,0 +1,93 @@
+html,
+body {
+	padding: 0;
+	margin: 0;
+
+}
+
+.cnt {
+	width: 95%;
+	margin: auto;
+	margin-top: 1.5%;
+	font-size: 14px;
+	color: #666;
+}
+
+.tpDta {
+	width: 90px;
+	margin: auto;
+	background: white;
+	text-align: center;
+	z-index: 666;
+
+}
+
+.bigK {
+	border: 2px solid #c0c0c0;
+	height: 120px;
+	margin: auto;
+	margin-top: -85px;
+	z-index: -1;
+	width: 51%;
+	border-bottom: 0;
+	position: relative;
+
+}
+
+.k {
+	border: 2px solid #eee;
+	height: 400px;
+	width: 49%;
+}
+
+.ltk {
+	float: left;
+}
+
+.rtk {
+	float: right;
+}
+
+.clas {
+	background: white;
+	width: 49px;
+	font-size: 18px;
+	color: #666;
+	text-align: center;
+	position: relative;
+	margin: auto;
+	padding-top: 8px;
+	margin-top: -30px;
+}
+
+.rct {
+	width: 24%;
+	color: #666;
+	
+	float:left;
+	margin-top:60px;
+	margin-left:60px;
+}
+
+.rct div:nth-child(1) {
+	padding-left:10px;
+	border-left: 3px solid #007398;
+	font-size: 14px;
+	height:13px;
+	line-height: 13px;
+}
+
+.rct div:nth-child(2) {
+
+	font-size: 26px;
+	margin-top:10px;
+	margin-bottom: 20px;
+
+}
+
+.rct div:nth-child(3) {
+
+	font-size: 14px;
+	color: #b2b2b2;
+
+}

@@ -1,0 +1,67 @@
+html,
+body {
+	padding: 0;
+	margin: 0;
+
+}
+
+.cnt {
+	width: 95%;
+	margin: auto;
+	margin-top: 1.5%;
+	font-size: 14px;
+	color: #666;
+}
+.datNum{
+	width:98%;
+	text-align: center;
+	margin:auto;
+	height:150px;
+}
+.ret{
+	width:16%;
+	float:left;
+	margin-bottom: 20px;
+}
+.ret div:nth-child(1){
+	font-size:20px;
+	color:#007398;
+}
+.ret div:nth-child(2){
+	margin-top: 5px;
+}
+.bBtn{
+	color:white;
+	background:#007398;
+	padding:5px 10px;
+	border-radius: 3px;
+	display: unset;
+	cursor: pointer;
+}
+
+.stbl{
+	margin-top:20px;
+	width:100%;
+}
+.stbl select{
+	width:40%;
+	margin-left:20px;
+	broder:1px solid #b3b3b3;
+	border-radius: 3px;
+	height:30px;
+}
+.stbl tr{
+	height:40px;
+	text-align: left;
+
+}
+
+.stbl tr td{
+	
+	}
+.stbl tr td:nth-child(1){
+	
+	padding-left:0;
+}
+
+
