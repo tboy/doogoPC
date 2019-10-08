@@ -3,22 +3,22 @@
 	<head>
 		<meta charset="utf-8">
 		<title>客户管理</title>
-	
-				<link rel="stylesheet" href="../css/bootstrap.css">
-				<link rel="stylesheet" href="../css/common.css">
-				<link rel="stylesheet" href="../css/iframe.css">
-				<link rel="stylesheet" href="../css/jquery.pagination.css">
-				<link rel="stylesheet" href="../css/jquery-ui.css">
-				<link rel="stylesheet" href="../css/reset.css">
-				<link rel="stylesheet" href="../css/style.css">
-				<link rel="stylesheet" href="../css/styles.css">
-				<link rel="stylesheet" href="../css/swiper.css">
 
-				<link rel="stylesheet" href="../css/number.css">
-					<link rel="stylesheet" type="text/css" href="../css/khgl.css" />
-				
+		<link rel="stylesheet" href="../css/bootstrap.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<link rel="stylesheet" href="../css/iframe.css">
+		<link rel="stylesheet" href="../css/jquery.pagination.css">
+		<link rel="stylesheet" href="../css/jquery-ui.css">
+		<link rel="stylesheet" href="../css/reset.css">
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/styles.css">
+		<link rel="stylesheet" href="../css/swiper.css">
+
+		<link rel="stylesheet" href="../css/number.css">
+		<link rel="stylesheet" type="text/css" href="../css/khgl.css" />
+
 		<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
-		    <script src="../js/lib/layer.js"></script>
+		<script src="../js/lib/layer.js"></script>
 	</head>
 	<body>
 		<div class="cnt">
@@ -261,10 +261,10 @@
 						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
 						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
 						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
-				
-				
+
+
 					</td>
-				
+
 					<td>
 						<a style="color:#007398;text-decoration: none;" href="javascript:void(0)">查看详情</a>
 					</td>
@@ -282,10 +282,10 @@
 						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
 						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
 						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
-				
-				
+
+
 					</td>
-				
+
 					<td>
 						<a style="color:#007398;text-decoration: none;" href="javascript:void(0)">查看详情</a>
 					</td>
@@ -303,10 +303,10 @@
 						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
 						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
 						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
-				
-				
+
+
 					</td>
-				
+
 					<td>
 						<a style="color:#007398;text-decoration: none;" href="javascript:void(0)">查看详情</a>
 					</td>
@@ -324,46 +324,54 @@
 						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
 						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
 						<span style="background: #f1f1f1;padding:3px 10px;">水果</span>
-				
-				
+
+
 					</td>
-				
+
 					<td>
 						<a style="color:#007398;text-decoration: none;" href="javascript:void(0)">查看详情</a>
 					</td>
 				</tr>
 			</table>
-			
+
 			<div style="text-align: right;margin:20px 0px;color:#000;">共2页&nbsp;&nbsp;&nbsp;每页20条</div>
 		</div>
-		
-		<div class="setting-layer left-setting-layer" style="display:none;padding:20px;width: 419px; height: 300px;font-size:14px;color:#666;" id="panel">
+
+		<div class="setting-layer left-setting-layer" style="display:none;padding:20px;width: 419px; height: 300px;font-size:14px;color:#666;"
+		 id="panel">
 			<div style="height: 30px;">
-			<span style="border:1px solid #c0c0c0;border-radius: 3px;padding:5px 20px;margin-right:10px;">上传文件</span><span style="color:#009944">文件.csv</span>
-			<input type="file" name="file" style="
+				<span style="border:1px solid #c0c0c0;border-radius: 3px;padding:5px 20px;margin-right:10px;">上传文件</span><span
+				 style="color:#009944" id="fileName"></span>
+				<input type="file" name="file" onChange="updateName();" id='myFile' style="
 			    width: 212px;
 			    padding: 0;
 			    margin: 0;
 			    opacity: 0;
 			    margin-top: -20px;
-			"/>
+			"
+				 accept=".csv" />
 			</div>
-			
-			<div style="margin-bottom: 40px;line-height: 20px;">当前仅支持csv格式文件（大小在10M以内），请使用Office 2010及以上版本，否则可能出现乱码必须严格按照模板内容填入客户数据，否则可能会出现导入异常</div>
+
+			<div style="margin-bottom: 40px;line-height: 20px;">当前仅支持csv格式文件（大小在10M以内），请使用Office
+				2010及以上版本，否则可能出现乱码必须严格按照模板内容填入客户数据，否则可能会出现导入异常</div>
 			<a href="javascript:void(0);" style="color:#007398;text-decoration: none;">下载文件模板</a>
 			<div style="color:#b2b2b2;margin-top:10px;">文件模板数据不满足需求，请联系我们</div>
-		
-		<div style="margin-top:40px; margin-left: 100px;">
-			<a href="javascript:layer.closeAll();" class="btn_input_b1">取消</a><a href="javascript:upFile();" class="btn_input_b2">确定</a>
+
+			<div style="margin-top:40px; margin-left: 100px;">
+				<a href="javascript:layer.closeAll();" class="btn_input_b1">取消</a><a href="javascript:upFile();" class="btn_input_b2">确定</a>
+			</div>
 		</div>
-		</div>
+
+		<form id="form" method="post" style="display: none;" enctype="multipart/form-data">
+
+		</form>
 	</body>
 </html>
 <script type="text/javascript">
 	//批量导入
-	function showPanel(){
-		
-			layer.open({
+	function showPanel() {
+
+		layer.open({
 			type: 1,
 			title: '批量导入',
 			skin: 'layui-layer-demo',
@@ -372,15 +380,37 @@
 			content: $('#panel')
 		});
 	}
-	
-	function upFile(){
-		$("#file");
+
+	function updateName() {
+		$("#fileName").html($("#myFile")[0].files[0].name);
+	}
+
+	function upFile() {
+
+		$("#form").html("");
+		$("#form").append($("#myFile").clone());
+		var form = new FormData(document.getElementById("form"));
+		$.ajax({
+			url: "接口地址",
+			type: "post",
+			data: form,
+			cache: false,
+			processData: false,
+			contentType: false,
+			success: function(data) {
+				alert("操作成功！");
+			},
+			error: function(e) {
+				alert("网络错误，请重试！！");
+			}
+		});
+
 		layer.closeAll();
 	}
 	//查询
-	function submitHandle(){
+	function submitHandle() {
 		var pars = {};
-		$(".sel").each(function(){
+		$(".sel").each(function() {
 			var key = $(this).attr("id");
 			var val = $(this).val();
 			pars[key] = val;
@@ -388,24 +418,24 @@
 		console.log(pars);
 	}
 	//清空条件
-	function clearCon(){
-		$(".sel").each(function(){
-		
+	function clearCon() {
+		$(".sel").each(function() {
+
 			var val = $(this).val("");
 		});
 	}
 	//是否显示搜索条件
-	function searchPanel(){
-		if($(".sech").css("display")=="none"){
+	function searchPanel() {
+		if ($(".sech").css("display") == "none") {
 			$(".sech").show();
-			$("#icd").attr("src","../images/up.jpg");
-				$("#icd").css("margin-top","0px");
+			$("#icd").attr("src", "../images/up.jpg");
+			$("#icd").css("margin-top", "0px");
 			$("#txtsw").html("收起")
-		}else{
+		} else {
 			$(".sech").hide();
 			$("#txtsw").html("打开")
-			$("#icd").attr("src","../images/down.jpg");
-			$("#icd").css("margin-top","-5px");
+			$("#icd").attr("src", "../images/down.jpg");
+			$("#icd").css("margin-top", "-5px");
 		}
 	}
 </script>
