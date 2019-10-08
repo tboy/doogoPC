@@ -458,6 +458,8 @@
 							area: ['450px', '300px'],
 							content: $('#app2')
 						});
+						$("#btnTxt").val("进入小程序");
+						$("#txt").html("5/10");
 
 					}
 
@@ -479,9 +481,9 @@
 						item.titl = $("#btnTxt").val();
 						 $("#appId").val("");
 						 $("#appPath").val("");
-						$("#btnTxt").val("");
+						$("#btnTxt").val("进入小程序");
 							$("#passState").hide();
-							$("#txt").html("0/10");
+							$("#txt").html("5/10");
 						sortItem();
 						item.key = app.$data.myTools.length;
 						layer.closeAll();
