@@ -3,15 +3,16 @@
 	<head>
 		<meta charset="utf-8">
 		<title>首页概况</title>
-		<link rel="stylesheet" type="text/css"  href="../css/myIndex.css" />
+		<link rel="stylesheet" type="text/css" href="../css/myIndex.css" />
+		<script src="../js/vue.js"></script>
 	</head>
 	<body>
-		<div class="cnt">
+		<div class="cnt" id="cnt">
 			<div class="tp">
 				<span onClick="queryByDate(1)" style="cursor: pointer;">昨天</span>
-				<span onClick="queryByDate(2)"  style="cursor: pointer;">过去7天</span>
-				<span  onClick="queryByDate(3)"  style="cursor: pointer;">过去30天</span>
-				<span style="color:#999">更新时间：2019-08-23 10:23:45</span>
+				<span onClick="queryByDate(2)" style="cursor: pointer;">过去7天</span>
+				<span onClick="queryByDate(3)" style="cursor: pointer;">过去30天</span>
+				<span style="color:#999">更新时间：{{time}}</span>
 			</div>
 
 			<div class="allTxt">
@@ -21,50 +22,49 @@
 					<div class="rg1">
 						<div class="num1">
 							<div>花费</div>
-							<div>980.00</div>
+							<div>{{hf}}</div>
 							<div>当前营销的花费金额</div>
 						</div>
 						<div class="num1">
 							<div class="">曝光量</div>
-							<div>980.00</div>
+							<div>{{bgl}}</div>
 							<div>当前营销获得的曝光量</div>
 						</div>
 						<div class="num1">
 							<div class="">点击量</div>
-							<div>980.00</div>
+							<div>{{djl}}</div>
 							<div>当前营销获得的点击量</div>
 						</div>
 						<div class="num1">
 							<div class="">领取数量</div>
-							<div>980.00</div>
+							<div>{{lqsl}}</div>
 							<div>当前营销优惠券的领取数量</div>
 						</div>
 
 					</div>
 				</div>
 
-
 				<div class="row">
 					<img src="../images/idx2.jpg">
 					<div class="rg1">
 						<div class="num1">
 							<div class="">客户数据池</div>
-							<div>980.00</div>
+							<div>{{khsjc}}</div>
 							<div>当前访问商城的客户数量</div>
 						</div>
 						<div class="num1">
 							<div class="">到店人数</div>
-							<div>980.00</div>
+							<div>{{ddrs}}</div>
 							<div>当前进店客户的数量</div>
 						</div>
 						<div class="num1">
 							<div class="">会员数</div>
-							<div>980.00</div>
+							<div>{{hys}}</div>
 							<div>注册为会员的客户数量</div>
 						</div>
 						<div class="num1">
 							<div class="">用户数</div>
-							<div>980.00</div>
+							<div>{{yhs}}</div>
 							<div>当前访问商城的客户数量</div>
 						</div>
 
@@ -73,18 +73,17 @@
 
 			</div>
 
-
 			<div class="row" style="margin-top: 20px;">
 				<img src="../images/idx3.jpg">
 				<div class="rg1">
 					<div class="num1">
 						<div class="">销售额</div>
-						<div>980.00</div>
+						<div>{{xse}}</div>
 						<div>当前商城的已付款订单金额</div>
 					</div>
 					<div class="num1">
 						<div class="">支付订单数</div>
-						<div>980.00</div>
+						<div>{{zfdds}}</div>
 						<div>当前商城的订单数量</div>
 					</div>
 
@@ -123,7 +122,7 @@
 							<div>会员群</div>
 							<div>个性化匹配，多样标签</div>
 						</div>
-						<div class="ybtn"  onclick="publicHandel()">发布</div>
+						<div class="ybtn" onclick="publicHandel()">发布</div>
 					</div>
 				</div>
 
@@ -133,7 +132,7 @@
 							<div>到店客群</div>
 							<div>筛选到店，各种需求</div>
 						</div>
-						<div class="ybtn"  onclick="publicHandel()">发布</div>
+						<div class="ybtn" onclick="publicHandel()">发布</div>
 					</div>
 					<div class="nc">
 						<div class="leftNc">
@@ -150,13 +149,72 @@
 		</div>
 	</body>
 </html>
+<script src="../js/jquery.js"></script>
 <script>
+	var app;
+	$(function() {
+		var obj = {};
+		obj.time = getDate(0);
+		obj.hf = "88.45";
+		obj.bgl = "88.45";
+		obj.djl = "88.45";
+		obj.lqsl = "88.45";
+		obj.khsjc = "88.45";
+		obj.ddrs = "88.45";
+		obj.hys = "88.45";
+		obj.yhs = "88.45";
+		obj.xse = "88.45";
+		obj.zfdds = "88.45";
+		app = new Vue({
+			el: '#cnt',
+			data: obj
+		});
+	})
+
 	//昨天,7天,30天 查询数据
-	function queryByDate(type){
+	function queryByDate(type) {
+		//window.location.href = "index.html?type=" + type;
+		for (var key in app.$data) {
+			if (key != "time") {
+				app.$data[key] = parseInt(Math.random() * 1000) / 100;
+			}
+		}
 		
+		app.$data.time = getDate(type);
 	}
 	//发布
-	function publicHandel(){
-		
+	function publicHandel() {
+
+	}
+
+	function getDate(val) {
+		var now = new Date();
+		if (val == 0) {
+			return getYYYYMMDD(now);
+		}
+		if (val == 1) {
+			now.setTime(now.getTime() - 24 * 60 * 60 * 1000);
+			return getYYYYMMDD(now);
+		}
+		if (val == 2) {
+			var str = getYYYYMMDD(now)
+			now.setTime(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+			return getYYYYMMDD(now)+"至"+str;
+		}
+		if (val == 3) {
+			var str = getYYYYMMDD(now)
+			now.setTime(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+			return getYYYYMMDD(now)+"至"+str;
+		}
+
+	}
+
+	function getYYYYMMDD(d) {
+		var year = d.getFullYear();
+		var m = d.getMonth() + 1;
+		m = m < 10 ? "0" + m : m;
+		var d = d.getDate();
+		d = d < 10 ? "0" + d : d;
+		return year + "-" + m + "-" + d;
 	}
 </script>
