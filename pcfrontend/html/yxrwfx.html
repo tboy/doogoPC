@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>新建营销任务</title>
+		<link rel="stylesheet" href="../css/bootstrap.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<link rel="stylesheet" href="../css/iframe.css">
+		<link rel="stylesheet" href="../css/jquery.pagination.css">
+		<link rel="stylesheet" href="../css/jquery-ui.css">
+		<link rel="stylesheet" href="../css/reset.css">
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/styles.css">
+		<link rel="stylesheet" href="../css/swiper.css">
+		<link rel="stylesheet" href="../css/myTaskCom.css">
+		<link rel="stylesheet" href="../css/myTask3.css">
+		<link rel="stylesheet" href="../css/element-ui/index.css">
+		<script src="../js/echarts.min.js"></script>
+		<script src="../js/jquery.min.js"></script>
+		<script src="../css/element-ui/vue.js"></script>
+		<script src="../css/element-ui/index.js"></script>
+		<style>
+			.lb{
+			margin-right: 30px;
+		}
+		.rg{
+			    font-size: 14px;
+    color: #666;
+    font-weight: 100;
+		}
+		  .el-tag {
+			  border:1px solid #dcdfe6;
+    margin-left: 10px;
+	background-color:white;
+	color:#666;
+  }
+  .el-tag:nth-child(1){
+	  margin-left:0;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+	color:#007398;
+    padding-top: 0;
+	border:0;
+    padding-bottom: 0;
+  }
+	.selectBox{
+				border:1px solid #ccc;
+				width:100px;
+				height:30px;
+				border-radius: 5px;
+				float:left;
+			}
+			.colorBlock{
+				
+			}
+			.selectBox select{
+				border:0;
+				width:95px;
+				color:#666;
+				margin-top:3px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="myContent" id="cnt">
+			<div class="top_title">营销任务分析</div>
+
+
+			<div class="ct" style="height: 194px;">
+				<p class="titl">投放信息</p>
+
+
+				<div class="myCont" style="margin-left:150px;margin-top:40px;">
+
+					<div class="row">
+						<label class="lb">营销对比</label>
+						<div class="rg">
+							<span>
+								<el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleClose(tag)">
+									{{tag}}
+								</el-tag>
+								<el-button class="button-new-tag" size="small">+添加营销任务</el-button>
+
+							</span>
+						</div>
+					</div>
+
+					<div class="row" id="ranTime">
+						<label class="lb">时间范围</label>
+						<div class="rg">
+
+							<div class="datetimerange_box">
+								<el-date-picker v-model="dateRate" :picker-options="pickerOptions" type="daterange" range-separator="至"
+								 start-placeholder="开始日期" end-placeholder="结束日期">
+								</el-date-picker>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="row">
+						<label class="lb">关键指标</label>
+						<div class="rg">
+							<div class="selectBox">
+								<span class="colorBlock" style="background: #086a8b;"></span>
+								<select id="p2" onChange="changeChart();">
+
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div id="line" style="width:100%;height:400px">
+						<div id="container" style="height: 100%"></div>
+						<!-- <iframe id="frame" onLoad="setOpt();" src="line-simple.html" style="width:100%;height:400px;    margin-top: -30px;"></iframe> -->
+					</div>
+
+
+				</div>
+
+				<button class="value_button next" onClick="next();" style="margin-left: 306px;margin-top:30px;margin-bottom: 30px;">下一步</button>
+
+			</div>
+		</div>
+	</body>
+</html>
+
+<script src="../js/chartDemo.js"></script>
+<script>
+	var echart;
+	$(function() {
+		initDateUI();
+		$("#p2").append(getSelData(true));
+		chart = document.getElementById('container');
+		echart = echarts.init(chart);
+		echart.setOption(option, true);
+	});
+
+	function getSelData(isClick) {
+		var str = "<option value='总花费'>总花费</option>";
+		if (isClick) {
+			str += "<option value='曝光率'>曝光率</option>";
+		} else {
+			str += "<option value='曝光率' selected='seleced'>曝光率</option>";
+		}
+		if (isClick) {
+			str += "<option value='点击量' selected='seleced'>点击量</option>";
+		} else {
+			str += "<option value='点击量'>点击量</option>";
+		}
+
+		str += "<option value='点击率'>点击率</option>";
+		str += "<option value='点击均价'>点击均价</option>";
+		str += "<option value='领取数量'>领取数量</option>";
+		str += "<option value='核销数量'>核销数量</option>";
+		str += "<option value='支付金额'>支付金额</option>";
+		str += "<option value='优惠金额'>优惠金额</option>";
+		return str;
+
+	}
+
+	function initDateUI() {
+		var obj = {};
+		obj.dateRate = [];
+		obj.dynamicTags = ['推广计划_2019102814906', '推广计划_20191054906', '推广计划_201954906', '推广计划028154906',
+			'推广计划_201', '推广计划_20191028154'
+		];
+
+		var ranTime = new Vue({
+			el: "#cnt",
+			data: function() {
+				obj.defaultProps = {
+						children: 'children',
+						label: 'label'
+					},
+					obj.pickerOptions = {
+						onPick: ({
+							maxDate,
+							minDate
+						}) => {
+
+							this.pickerMinDate = minDate.getTime()
+							if (maxDate) {
+								this.pickerMinDate = ''
+							}
+						},
+						disabledDate: (time) => {
+
+						}
+					}
+				return obj;
+			},
+
+			methods: {
+				handleClose(tag) {
+					this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+				},
+				handleInputConfirm() {
+					let inputValue = this.inputValue;
+					if (inputValue) {
+						this.dynamicTags.push(inputValue);
+					}
+					this.inputVisible = false;
+					this.inputValue = '';
+				}
+			}
+		});
+	}
+
+	function initTimeUI() {
+		//每天投放时段
+		var time1 = "00";
+		var time2 = "23";
+		$("#time1").append(getOption1(time1));
+		$("#time2").append(getOption2(time1, time2));
+	}
+	//構建投放時間1
+	function getOption1(idx) {
+		var str = "";
+		for (var i = 0; i < 18; i++) {
+			var val = i < 10 ? "0" + i : i + "";
+
+			if (val == idx) {
+				str += "<option value='" + val + "' selected>" + val + ":00" + "</option>";
+			} else {
+				str += "<option value='" + val + "'>" + val + ":00" + "</option>";
+			}
+		}
+		return str;
+	}
+	//構建投放時間2
+	function getOption2(time1, time2) {
+		var str = "";
+
+
+		var idx = parseInt(time1) + 6;
+
+		for (var i = idx; i < 24; i++) {
+			var val = i < 10 ? "0" + i : i + "";
+
+			if (val == time2) {
+				str += "<option value='" + val + "' selected>" + val + ":00" + "</option>";
+			} else {
+				str += "<option value='" + val + "'>" + val + ":00" + "</option>";
+			}
+		}
+		return str;
+	}
+	//控制時間間隔6小時
+	function selTime() {
+		var t1 = parseInt($("#time1").val());
+		var t2 = parseInt($("#time2").val());
+		var t3 = t2 - t1;
+		var str = "";
+		if (t3 < 6) {
+
+			for (var i = t1 + 6; i < 24; i++) {
+				var val = i < 10 ? "0" + i : i + "";
+				str += "<option value='" + val + "'>" + val + ":00" + "</option>";
+
+			}
+		} else {
+			for (var i = t1 + 6; i < 24; i++) {
+				var val = i < 10 ? "0" + i : i + "";
+
+				if (val == t2) {
+					str += "<option value='" + val + "' selected>" + val + ":00" + "</option>";
+				} else {
+					str += "<option value='" + val + "'>" + val + ":00" + "</option>";
+				}
+			}
+		}
+		$("#time2").html(str);
+
+	}
+
+
+	function next() {
+		var obj = {};
+		obj.name = $("#name").val();
+
+		obj.start_time = $($("#ranTime").find("input")[0]).val();
+		obj.end_time = $($("#ranTime").find("input")[1]).val();
+		obj.time1 = $("#time1").val();
+		obj.time2 = $("#time2").val();
+		obj.dayMoney = $("#dayMoney").val();
+		obj.moneyTime = $("#moneyTime").val();
+		for (var key in obj) {
+			alert("请填写完整数据");
+			return;
+		}
+		obj.checkBoxVal = [];
+		$(".cb").each(function() {
+			if ($(this).is(':checked')) {
+				obj.checkBoxVal.push($(this).val());
+			}
+		});
+		if (obj.checkBoxVal.length == 0) {
+			alert("请填写完整数据");
+			return;
+
+		}
+
+		console.log(obj);
+	}
+</script>

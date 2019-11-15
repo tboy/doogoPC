@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>新建营销任务</title>
+		<link rel="stylesheet" href="../css/bootstrap.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<link rel="stylesheet" href="../css/iframe.css">
+		<link rel="stylesheet" href="../css/jquery.pagination.css">
+		<link rel="stylesheet" href="../css/jquery-ui.css">
+		<link rel="stylesheet" href="../css/reset.css">
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/styles.css">
+		<link rel="stylesheet" href="../css/swiper.css">
+		<link rel="stylesheet" href="../css/myTaskCom.css">
+		<link rel="stylesheet" href="../css/myTask3.css">
+		<link rel="stylesheet" href="../css/element-ui/index.css">
+
+		<script src="../js/jquery.min.js"></script>
+		<script src="../css/element-ui/vue.js"></script>
+		<script src="../css/element-ui/index.js"></script>
+		<style>
+			.lb{
+			margin-right: 30px;
+		}
+		.rg{
+			    font-size: 14px;
+    color: #666;
+    font-weight: 100;
+		}
+		
+		input[type="checkbox"] {
+    margin-left: 49px;
+		-webkit-appearance: none;
+		vertical-align: middle;
+		margin-top: 0;
+		background: #fff;
+		border: #E5E5E5 solid 1px;
+		border-radius: 0;
+		min-height: 12px;
+		min-width: 12px;
+		width: auto;
+		height: auto;
+	}
+	
+	input[type="checkbox"]:checked {
+		background: #007398;
+	}
+
+	input[type=checkbox]:checked::after {
+		content: '';
+		
+		position: absolute;
+		background: transparent;
+		border: #fff solid 2px;
+		border-top: none;
+		border-right: none;
+		height: 6px;
+		width: 10px;
+		-moz-transform: rotate(-45deg);
+		-ms-transform: rotate(-45deg);
+		-webkit-transform: rotate(-45deg);
+		transform: rotate(-45deg);
+	}
+
+input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  
+}
+input[type="radio"] + .radio-label:before {
+  content: '';
+  background: #fff;
+  border-radius: 100%;
+  border: 1px solid #b4b4b4;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  position: relative;
+  top: 0em;
+  left:-1.2em;
+  margin-right: 0em;
+  vertical-align: top;
+  cursor: pointer;
+  text-align: center;
+  -webkit-transition: all 250ms ease;
+  transition: all 250ms ease;
+}
+input[type="radio"]:checked + .radio-label:before {
+  background-color: #007398;
+
+  box-shadow: inset 0 0 0 1px #f4f4f4;
+}
+		</style>
+	</head>
+	<body>
+		<div class="myContent">
+			<div class="top_title">新建广告营销</div>
+
+
+			<div class="ct" style="height: 194px;">
+				<p class="titl">投放信息</p>
+
+
+				<div class="myCont" style="margin-left:150px;margin-top:40px;">
+
+					<div class="row">
+						<label class="lb"><span style="color:red;">*</span>广告名称</label>
+						<div class="rg">
+							<span class="form_input_box" style="width:350px;">
+								<input type="text" placeholder='广告名称' onblur="" class="frm_input">
+							</span>0/30
+						</div>
+					</div>
+
+					<div class="row" id="ranTime">
+						<label class="lb"><span style="color:red;">*</span>投放时间</label>
+						<div class="rg">
+
+							<div class="datetimerange_box">
+								<el-date-picker v-model="dateRate" :picker-options="pickerOptions" type="daterange" range-separator="至"
+								 start-placeholder="开始日期" end-placeholder="结束日期">
+								</el-date-picker>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<label class="lb"><span style="color:red;">*</span>投放总预算</label>
+						<div class="rg">
+							<span class="form_input_box" style="width:350px;">
+								<input type="number" placeholder='投放总预算' onblur="" class="frm_input">
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<label class="lb"><span style="color:red;">*</span>每日预算</label>
+						<div class="rg">
+							<span class="form_input_box" style="width:350px;">
+								<input type="number" placeholder='每日预算' onblur="" class="frm_input">
+							</span>
+						</div>
+					</div>
+
+					<div class="row">
+						<label class="lb"><span style="color:red;">*</span>出价类型</label>
+						<div class="rg">
+							<div class="radio">
+								<input id="radio-1" name="radio" type="radio" checked>
+								<label for="radio-1" class="radio-label">CPM <span style="color:#b2b2b2;">平均每一千人分别听到或者看到某广告一次一共需要多少广告成本</span></label>
+							</div>
+						
+						<div class="radio">
+							<input id="radio-2" name="radio" type="radio" >
+							<label for="radio-2" class="radio-label">CPC <span style="color:#b2b2b2;">点击付费广告，根据广告被点击的次数收费</span></label>
+						</div>
+						<div class="radio">
+							<input id="radio-3" name="radio" type="radio" >
+							<label for="radio-3" class="radio-label">CPS <span style="color:#b2b2b2;">以实际销售产品数量来计算广告费用</span></label>
+						</div>
+						
+					</div>
+				</div>
+
+
+			</div>
+
+			<p class="titl">流量渠道</p>
+
+
+			<div class="myCont" style="margin-left:150px;margin-top:40px;">
+				<div class="row">
+					<label class="lb"><span style="color:red;">*</span>媒体</label>
+					<div class="rg">
+						<button class="value_button next" onClick="show();" style="color:#666666;background: white;border:1px solid #e5e5e5;border-radius: 5px;margin-left: 0;">选择媒体</button>
+
+					</div>
+				</div>
+				<div class="row">
+					<label class="lb">&nbsp;</label>
+					<div class="rg">
+						已选择 2个
+					</div>
+
+				</div>
+
+				<div class="row">
+					<label class="lb"><span style="color:red;">*</span>地域</label>
+					<div class="rg">
+						<div class="radio" style="float:left;margin-right:3rem;">
+							<input id="radio-4" name="area" type="radio" >
+							<label for="radio-4" class="radio-label">不限</label>
+						</div>
+						<div class="radio" style="float:left;margin-right:3rem;">
+							<input id="radio-5" name="area" type="radio" >
+							<label for="radio-5" class="radio-label">省市</label>
+						</div>
+						<div class="radio" style="float:left;margin-right:3rem;">
+							<input id="radio-6" name="area" type="radio" >
+							<label for="radio-6" class="radio-label">地理位置</label>
+						</div>
+						
+						<br />
+						<button class="value_button next" onClick="show();" style="color:#666666;background: white;border:1px solid #e5e5e5;border-radius: 5px;margin-left: 0;">
+							选择地域</button>
+					</div>
+				</div>
+				<div class="row">
+					<label class="lb">&nbsp;</label>
+					<div class="rg">
+						已选择 2个
+					</div>
+
+				</div>
+
+				<div class="row">
+					<label class="lb">兴趣</label>
+					<div class="rg">
+						<button class="value_button next" onClick="show();" style="color:#666666;background: white;border:1px solid #e5e5e5;border-radius: 5px;margin-left: 0;">
+							选择兴趣</button>
+					</div>
+				</div>
+				<div class="row">
+					<label class="lb">&nbsp;</label>
+					<div class="rg">
+						已选择 2个
+						<el-tree :data="data2" show-checkbox
+						default-expand-all
+						node-key="id"
+						ref="tree"
+						highlight-current
+						:props="defaultProps">
+						</el-tree>
+					</div>
+
+				</div>
+
+				<div class="row">
+					<label class="lb">性别</label>
+					<div class="rg">
+						<div class="radio" style="float:left;margin-right:3rem;">
+							<input id="radio-7" name="sex" type="radio" >
+							<label for="radio-7" class="radio-label">不限</label>
+						</div>
+						<div class="radio" style="float:left;margin-right:3rem;">
+							<input id="radio-8" name="sex" type="radio" >
+							<label for="radio-8" class="radio-label">男</label>
+						</div>
+						<div class="radio" style="float:left;margin-right:3rem;">
+							<input id="radio-9" name="sex" type="radio" >
+							<label for="radio-9" class="radio-label">女</label>
+						</div>
+						
+					</div>
+				</div>
+
+				<div class="row">
+					<label class="lb">年龄</label>
+					<div class="rg">
+						<div style="float:left;">
+							<label class="checkbox_box">
+								<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' checked='checked' value="0"><span>
+									<18 </span> </label> </div> <div style="float:left;">
+										<label class="checkbox_box">
+											<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' checked='checked' value="0"><span>
+												18-25 </span></label>
+						</div>
+						<div style="float:left;">
+							<label class="checkbox_box">
+								<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' checked='checked' value="0"><span>
+									25-30 </span></label>
+						</div>
+						<div style="float:left;">
+							<label class="checkbox_box">
+								<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' checked='checked' value="0"><span>
+									30-35 </span></label>
+						</div>
+						<div style="float:left;">
+							<label class="checkbox_box">
+								<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' checked='checked' value="0"><span>
+									35-40</span></label>
+						</div>
+						<div style="float:left;">
+							<label class="checkbox_box">
+								<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' checked='checked' value="0"><span>
+									40-50</span></label>
+						</div>
+						<div style="float:left;">
+							<label class="checkbox_box">
+								<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' checked='checked' value="0"><span> >50</span></label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<label class="lb">收入水平</label>
+					<div class="rg">
+						<div style="float:left;">
+							<label class="checkbox_box">
+								<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' checked='checked' value="0"><span>
+									<1000元 </span> </label> </div> <div style="float:left;">
+										<label class="checkbox_box">
+											<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' checked='checked' value="0"><span>
+												1001-3000元 </span></label>
+						</div>
+						<div style="float:left;">
+							<label class="checkbox_box">
+								<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' checked='checked' value="0"><span>
+									3001-5000元 </span></label>
+						</div>
+						<div style="float:left;">
+							<label class="checkbox_box">
+								<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' checked='checked' value="0"><span>
+									5001-10000元</span></label>
+						</div>
+						<div style="float:left;">
+							<label class="checkbox_box">
+								<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' checked='checked' value="0"><span>
+									>10000元</span></label>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+
+
+			<p class="titl">上传素材</p>
+
+
+			<div class="myCont" style="margin-left:150px;margin-top:40px;">
+				<div class="row">
+					<label class="lb">媒体名称</label>
+					<div class="rg">
+
+					</div>
+				</div>
+
+				<div class="row">
+					<label class="lb"><span style="color:red;">*</span>素材名称</label>
+					<div class="rg">
+						<span class="form_input_box" style="width:350px;">
+							<input type="number" placeholder='素材名称' onblur="" class="frm_input">
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<label class="lb"><span style="color:red;">*</span>落地页地址</label>
+					<div class="rg">
+						<span class="form_input_box" style="width:350px;">
+							<input type="number" placeholder='落地页地址' onblur="" class="frm_input">
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<label class="lb">文本</label>
+					<div class="rg">
+						<span class="form_input_box" style="width:350px;">
+							<input type="number" placeholder='文本' onblur="" class="frm_input">
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<label class="lb"><span style="color:red;">*</span>上传图片</label>
+					<div class="rg">
+
+						<button class="value_button next" onClick="show();" style="color:#666666;background: white;border:1px solid #e5e5e5;border-radius: 5px;margin-left: 0;">
+							选择图片</button>
+					</div>
+				</div>
+
+			</div>
+
+			<button class="value_button next" onClick="next();" style="margin-left: 306px;margin-top:30px;margin-bottom: 30px;">下一步</button>
+
+		</div>
+	</body>
+</html>
+<script>
+	$(function() {
+		initDateUI();
+		initTimeUI();
+	});
+
+	function initDateUI() {
+		var obj = {};
+		obj.dateRate = [];
+		obj.data2 = [{
+		  id: 1,
+		  label: '一级 1',
+		  children: [{
+		    id: 4,
+		    label: '二级 1-1',
+		    children: [{
+		      id: 9,
+		      label: '三级 1-1-1'
+		    }, {
+		      id: 10,
+		      label: '三级 1-1-2'
+		    }]
+		  }]
+		}, {
+		  id: 2,
+		  label: '一级 2',
+		  children: [{
+		    id: 5,
+		    label: '二级 2-1'
+		  }, {
+		    id: 6,
+		    label: '二级 2-2'
+		  }]
+		}, {
+		  id: 3,
+		  label: '一级 3',
+		  children: [{
+		    id: 7,
+		    label: '二级 3-1'
+		  }, {
+		    id: 8,
+		    label: '二级 3-2'
+		  }]
+		}];
+		var ranTime = new Vue({
+			el: "#ranTime",
+			data: function() {
+				var d = new Date();
+				var dy = new Date(d);
+					obj.defaultProps ={
+					  children: 'children',
+					  label: 'label'
+					},
+				obj.pickerOptions = {
+					onPick: ({
+						maxDate,
+						minDate
+					}) => {
+
+						this.pickerMinDate = minDate.getTime()
+						if (maxDate) {
+							this.pickerMinDate = ''
+						}
+					}
+					
+				}
+				return obj;
+			}
+		});
+	}
+
+	function initTimeUI() {
+		//每天投放时段
+		var time1 = "00";
+		var time2 = "23";
+		$("#time1").append(getOption1(time1));
+		$("#time2").append(getOption2(time1, time2));
+	}
+	//構建投放時間1
+	function getOption1(idx) {
+		var str = "";
+		for (var i = 0; i < 18; i++) {
+			var val = i < 10 ? "0" + i : i + "";
+
+			if (val == idx) {
+				str += "<option value='" + val + "' selected>" + val + ":00" + "</option>";
+			} else {
+				str += "<option value='" + val + "'>" + val + ":00" + "</option>";
+			}
+		}
+		return str;
+	}
+	//構建投放時間2
+	function getOption2(time1, time2) {
+		var str = "";
+
+
+		var idx = parseInt(time1) + 6;
+
+		for (var i = idx; i < 24; i++) {
+			var val = i < 10 ? "0" + i : i + "";
+
+			if (val == time2) {
+				str += "<option value='" + val + "' selected>" + val + ":00" + "</option>";
+			} else {
+				str += "<option value='" + val + "'>" + val + ":00" + "</option>";
+			}
+		}
+		return str;
+	}
+	//控制時間間隔6小時
+	function selTime() {
+		var t1 = parseInt($("#time1").val());
+		var t2 = parseInt($("#time2").val());
+		var t3 = t2 - t1;
+		var str = "";
+		if (t3 < 6) {
+
+			for (var i = t1 + 6; i < 24; i++) {
+				var val = i < 10 ? "0" + i : i + "";
+				str += "<option value='" + val + "'>" + val + ":00" + "</option>";
+
+			}
+		} else {
+			for (var i = t1 + 6; i < 24; i++) {
+				var val = i < 10 ? "0" + i : i + "";
+
+				if (val == t2) {
+					str += "<option value='" + val + "' selected>" + val + ":00" + "</option>";
+				} else {
+					str += "<option value='" + val + "'>" + val + ":00" + "</option>";
+				}
+			}
+		}
+		$("#time2").html(str);
+
+	}
+
+
+	function next() {
+		var obj = {};
+		obj.name = $("#name").val();
+
+		obj.start_time = $($("#ranTime").find("input")[0]).val();
+		obj.end_time = $($("#ranTime").find("input")[1]).val();
+		obj.time1 = $("#time1").val();
+		obj.time2 = $("#time2").val();
+		obj.dayMoney = $("#dayMoney").val();
+		obj.moneyTime = $("#moneyTime").val();
+		for (var key in obj) {
+			alert("请填写完整数据");
+			return;
+		}
+		obj.checkBoxVal = [];
+		$(".cb").each(function() {
+			if ($(this).is(':checked')) {
+				obj.checkBoxVal.push($(this).val());
+			}
+		});
+		if (obj.checkBoxVal.length == 0) {
+			alert("请填写完整数据");
+			return;
+
+		}
+
+		console.log(obj);
+	}
+</script>
