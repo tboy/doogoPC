@@ -34,7 +34,360 @@
 		<script src="../js/page/jquery.transit.min.js"></script>
 		<script src="../js/page/es6-shim.min.js"></script>
 		<script src="../js/page/easyhelper.min.js"></script>
-		<style>
+		
+	</head>
+	<body>
+		<div class="myContent" id="cnt">
+			<div class="top_title">营销任务分析</div>
+
+
+			<div class="ct" style="height:400px;border:0;font-size:14px;color:#666;">
+
+
+				<div class="myCont" style="margin-top:40px;">
+
+					<div class="row">
+						<label class="lb">营销对比</label>
+						<div class="rg">
+							<span>
+								<el-tag :key="index" v-for="(tag,index) in dynamicTags" closable :disable-transitions="false" @close="handleClose(tag)">
+									{{tag.label}}
+								</el-tag>
+
+
+								<el-select v-model="value" @change="addTag"  filterable placeholder="+添加营销任务">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
+							</span>
+
+						</div>
+					</div>
+
+					<div class="row" id="ranTime">
+						<label class="lb">时间范围</label>
+						<div class="rg">
+
+							<div class="datetimerange_box">
+								<el-date-picker v-model="dateRate" :picker-options="pickerOptions" @change="queryData" type="daterange" range-separator="至"
+								 start-placeholder="开始日期" end-placeholder="结束日期">
+								</el-date-picker>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="row" style="">
+						<label class="lb">关键指标</label>
+						<div class="rg">
+							<div class="selectBox">
+
+								<select id="p2" @change="queryData">
+
+								</select>
+							</div>
+						</div>
+					</div>
+					
+
+					<div id="line" style="margin-top:10px;width:98%;height:400px;border: 1px solid #ccc;">
+						<div id="container" style="height: 100%"></div>
+						<!-- <iframe id="frame" onLoad="setOpt();" src="line-simple.html" style="width:100%;height:400px;    margin-top: -30px;"></iframe> -->
+					</div>
+
+
+
+					<div style="margin-top:20px;margin-bottom: 10px;">营销任务汇总表</div>
+					<table class="tbl" style="">
+						<tr class="header-table-head">
+
+							<td>营销任务名称</td>
+							<td>花费</td>
+							<td>曝光量</td>
+							<td>点击量</td>
+							<td>点击率</td>
+							<td>点击均价</td>
+							<td>领取量</td>
+							<td>核销量</td>
+							<td>支付金额</td>
+							<td>优惠金额</td>
+						</tr>
+						<template v-for="(item,idx) in tbs">
+							<tr class="dt">
+								<td>{{item.yxrwmc}}</td>
+								<td>{{item.hf}}</td>
+								<td>{{item.bgl}}</td>
+								<td>{{item.djl}}</td>
+								<td>{{item.djv}}%</td>
+								<td>{{item.djjj}}</td>
+								<td>{{item.lql}}</td>
+								<td>{{item.hxl}}</td>
+								<td>{{item.zfje}}</td>
+								<td>{{item.yhje}}</td>
+							</tr>
+						</template>
+					</table>
+					<div style="margin-top:20px;margin-bottom: 10px;">营关键指标明细表</div>
+					<table class="tbl" style="">
+						<tr class="header-table-head">
+							<td style="padding-left:20px;">时间</td>
+							<td>营销任务名称</td>
+							<td>花费</td>
+							<td>曝光量</td>
+							<td>点击量</td>
+							<td>点击率</td>
+							<td>点击均价</td>
+							<td>领取量</td>
+							<td>核销量</td>
+							<td>支付金额</td>
+							<td>优惠金额</td>
+						</tr>
+						<template v-for="(item,idx) in tbs1">
+							<tr class="dt">
+								<td style="padding-left:20px;">{{item.sj}}</td>
+								<td>{{item.yxrwmc}}</td>
+								<td>{{item.hf}}</td>
+								<td>{{item.bgl}}</td>
+								<td>{{item.djl}}</td>
+								<td>{{item.djv}}%</td>
+								<td>{{item.djjj}}</td>
+								<td>{{item.lql}}</td>
+								<td>{{item.hxl}}</td>
+								<td>{{item.zfje}}</td>
+								<td>{{item.yhje}}</td>
+							</tr>
+						</template>
+					</table>
+
+
+					<div id="page" style="margin:10px 0px;margin-bottom: 50px;"></div>
+
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+<script>
+	var echart;
+	var app;
+	$(function() {
+		initDateUI();
+		$("#p2").append(getSelData(true));
+		chart = document.getElementById('container');
+		echart = echarts.init(chart);
+		
+		
+
+		getMYSelect();
+		$("#bb").chosen();
+		Helper.ui.page("#page", {
+			total: 30, //数据总量
+			pageSize: 8, //每页的数据量
+			currentPage: 1, //默认处于哪一页
+			showTotal: false, //是否在分页按钮左侧显示数据总量
+			showTo: false, //是否在分页按钮右侧显示直接跳转至某一页
+			change: function(i) {
+				console.log("第几页" + i);
+				//自己后台拉数据 app.$data.tbs
+				app.$data.currentPage = i;
+                app.queryData();
+			}
+		});
+	});
+
+	function getSelData(isClick) {
+		var str = "<option value='总花费'>总花费</option>";
+		if (isClick) {
+			str += "<option value='曝光率'>曝光率</option>";
+		} else {
+			str += "<option value='曝光率' selected='seleced'>曝光率</option>";
+		}
+		if (isClick) {
+			str += "<option value='点击量' selected='seleced'>点击量</option>";
+		} else {
+			str += "<option value='点击量'>点击量</option>";
+		}
+
+		str += "<option value='点击率'>点击率</option>";
+		str += "<option value='点击均价'>点击均价</option>";
+		str += "<option value='领取数量'>领取数量</option>";
+		str += "<option value='核销数量'>核销数量</option>";
+		str += "<option value='支付金额'>支付金额</option>";
+		str += "<option value='优惠金额'>优惠金额</option>";
+		return str;
+
+	}
+
+	//自己组下拉数据
+	function getMYSelect() {
+		var str = "<option value=''>全部营销任务</option>";
+		for (var i = 0; i < 20; i++) {
+			str += "<option value='营销任务" + i + "'>营销任务" + i + "</option>"
+		}
+		$("#bb").html(str);
+
+	}
+	//表格数据
+	function makeData() {
+		var arr = [];
+		for (var i = 0; i < 8; i++) {
+			var item = {};
+			item.id = i;
+			item.sj = "2019-01-0" + i;
+			item.yxrwmc = i + "推广任务-20190101"
+			item.hf = 12.00;
+			item.bgl = 12;
+			item.djl = 30;
+			item.djv = 12;
+			item.djjj = 123;
+			item.lql = 12;
+			item.hxl = 123;
+			item.zfje = 123;
+			item.yhje = 20;
+			arr.push(item);
+		}
+		return arr;
+	}
+
+	function initDateUI() {
+		var obj = {};
+		obj.tbs =[];
+		obj.tbs1 =[];
+		obj.dateRate = [];
+		obj.dynamicTags = [
+		];
+        obj.currentPage = 1;
+		obj.options = [{
+			value: 1,
+			label: '推广计划_20191011'
+		}, {
+			value: 2,
+			label: '推广计划_20191012'
+		}, {
+			value: 3,
+			label: '推广计划_20191013'
+		}, {
+			value: 4,
+			label: '推广计划_20191014'
+		}, {
+			value: 5,
+			label: '推广计划_20191015'
+		}];
+		obj.value = ''
+		app = new Vue({
+			el: "#cnt",
+			data: function() {
+				obj.defaultProps = {
+						children: 'children',
+						label: 'label'
+					},
+					obj.pickerOptions = {
+						onPick: ({
+							maxDate,
+							minDate
+						}) => {
+
+							this.pickerMinDate = minDate.getTime()
+							if (maxDate) {
+								this.pickerMinDate = ''
+							}
+						},
+						disabledDate: (time) => {
+
+						}
+					}
+				return obj;
+			},
+
+			methods: {
+				handleClose(tag) {
+			        var idx = 0;
+					var that = this;
+					this.dynamicTags.map(function(item){
+						if(item.value == tag.value) {
+							app.$data.dynamicTags.splice(idx,1);
+						    that.queryData();
+						}
+						idx++;
+					});
+					
+				},
+				addTag(){
+					var that = this;
+					this.$data.options.map(function(item){
+						 if(item.value == app.$data.value) {
+							 var hadItem = false;
+							 app.$data.dynamicTags.map(function(item2){
+								 if(item2.value == item.value) {
+									 hadItem = true;
+								 }
+							 });
+							 if(!hadItem) {
+								 app.$data.dynamicTags.push(item);
+								 that.queryData();
+							 }
+							 app.$data.value = '';
+							 return;
+						 }
+					})
+					
+				},
+				queryData(){
+					//查询数据
+					console.log(app.$data.dynamicTags);//标签
+					console.log(app.$data.dateRate);//时间
+					console.log($("#p2").val());//指标
+					if(app.$data.dynamicTags.length==0) return;
+					if(app.$data.dateRate.length == 0) return;
+					//模拟查询
+					if(app.$data.dynamicTags.length>=2) {
+						updateChart();
+						updateTable();
+					}
+					//重新设页面页数
+// 					Helper.ui.page("#page", {
+// 						total: 10, //数据总量
+// 						pageSize: 8, //每页的数据量
+// 						currentPage: 1, //默认处于哪一页
+// 						showTotal: false, //是否在分页按钮左侧显示数据总量
+// 						showTo: false, //是否在分页按钮右侧显示直接跳转至某一页
+// 						change: function(i) {
+// 							console.log("第几页" + i);
+// 							//自己后台拉数据 app.$data.tbs
+// 							app.$data.currentPage = i;
+// 					        app.queryData();
+// 						}
+// 					});
+					
+				}
+			}
+		});
+		
+		
+	}
+	
+	function updateTable(){
+		app.$data.tbs = makeData();
+		app.$data.tbs1 = makeData();
+	}
+	
+	function updateChart(){
+		var arr = app.$data.dynamicTags.map(function(item){
+			return item.label;
+		});
+	    option.legend.data = arr;
+		option.series[0].name = arr[0];
+		option.series[1].name = arr[1];
+		//....
+		
+		echart.setOption(option,true);
+		$("canvas").css("position", "absolute");
+		$("canvas").css("left", "40px");
+		$("canvas").css("top", "260px");
+		
+	}
+</script>
+<style>
 			.el-input__inner::-webkit-input-placeholder {
   color: #086a8b;
 }
@@ -202,319 +555,3 @@
 					
 			
 		</style>
-	</head>
-	<body>
-		<div class="myContent" id="cnt">
-			<div class="top_title">营销任务分析</div>
-
-
-			<div class="ct" style="height:400px;border:0;font-size:14px;color:#666;">
-
-
-				<div class="myCont" style="margin-top:40px;">
-
-					<div class="row">
-						<label class="lb">营销对比</label>
-						<div class="rg">
-							<span>
-								<el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleClose(tag)">
-									{{tag.label}}
-								</el-tag>
-
-
-								<el-select v-model="value" @change="addTag"  filterable placeholder="+添加营销任务">
-									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-									</el-option>
-								</el-select>
-							</span>
-
-						</div>
-					</div>
-
-					<div class="row" id="ranTime">
-						<label class="lb">时间范围</label>
-						<div class="rg">
-
-							<div class="datetimerange_box">
-								<el-date-picker v-model="dateRate" :picker-options="pickerOptions" @change="queryData" type="daterange" range-separator="至"
-								 start-placeholder="开始日期" end-placeholder="结束日期">
-								</el-date-picker>
-							</div>
-
-						</div>
-					</div>
-
-					<div class="row" style="">
-						<label class="lb">关键指标</label>
-						<div class="rg">
-							<div class="selectBox">
-
-								<select id="p2" @change="queryData">
-
-								</select>
-							</div>
-						</div>
-					</div>
-					<div class="row" style="opacity: 0;margin-top:0px;">
-						<label class="lb">关键指标</label>
-						<div class="rg">
-							<div class="selectBox">
-
-								<select id="p9">
-
-								</select>
-							</div>
-						</div>
-					</div>
-
-					<div id="line" style="width:98%;height:400px;border: 1px solid #ccc;">
-						<div id="container" style="height: 100%"></div>
-						<!-- <iframe id="frame" onLoad="setOpt();" src="line-simple.html" style="width:100%;height:400px;    margin-top: -30px;"></iframe> -->
-					</div>
-
-
-
-					<div style="margin-top:20px;margin-bottom: 10px;">营销任务汇总表</div>
-					<table class="tbl" style="">
-						<tr class="header-table-head">
-
-							<td>营销任务名称</td>
-							<td>花费</td>
-							<td>曝光量</td>
-							<td>点击量</td>
-							<td>点击率</td>
-							<td>点击均价</td>
-							<td>领取量</td>
-							<td>核销量</td>
-							<td>支付金额</td>
-							<td>优惠金额</td>
-						</tr>
-						<template v-for="(item,idx) in tbs">
-							<tr class="dt">
-								<td>{{item.yxrwmc}}</td>
-								<td>{{item.hf}}</td>
-								<td>{{item.bgl}}</td>
-								<td>{{item.djl}}</td>
-								<td>{{item.djv}}%</td>
-								<td>{{item.djjj}}</td>
-								<td>{{item.lql}}</td>
-								<td>{{item.hxl}}</td>
-								<td>{{item.zfje}}</td>
-								<td>{{item.yhje}}</td>
-							</tr>
-						</template>
-					</table>
-					<div style="margin-top:20px;margin-bottom: 10px;">营关键指标明细表</div>
-					<table class="tbl" style="">
-						<tr class="header-table-head">
-							<td style="padding-left:20px;">时间</td>
-							<td>营销任务名称</td>
-							<td>花费</td>
-							<td>曝光量</td>
-							<td>点击量</td>
-							<td>点击率</td>
-							<td>点击均价</td>
-							<td>领取量</td>
-							<td>核销量</td>
-							<td>支付金额</td>
-							<td>优惠金额</td>
-						</tr>
-						<template v-for="(item,idx) in tbs1">
-							<tr class="dt">
-								<td style="padding-left:20px;">{{item.sj}}</td>
-								<td>{{item.yxrwmc}}</td>
-								<td>{{item.hf}}</td>
-								<td>{{item.bgl}}</td>
-								<td>{{item.djl}}</td>
-								<td>{{item.djv}}%</td>
-								<td>{{item.djjj}}</td>
-								<td>{{item.lql}}</td>
-								<td>{{item.hxl}}</td>
-								<td>{{item.zfje}}</td>
-								<td>{{item.yhje}}</td>
-							</tr>
-						</template>
-					</table>
-
-
-					<div id="page" style="margin:10px 0px;margin-bottom: 50px;"></div>
-
-				</div>
-			</div>
-		</div>
-	</body>
-</html>
-<script>
-	var echart;
-	var app;
-	$(function() {
-		initDateUI();
-		$("#p2").append(getSelData(true));
-		chart = document.getElementById('container');
-		echart = echarts.init(chart);
-		echart.setOption(option, true);
-		$("canvas").css("position", "inherit");
-
-		getMYSelect();
-		$("#bb").chosen();
-		Helper.ui.page("#page", {
-			total: 30, //数据总量
-			pageSize: 8, //每页的数据量
-			currentPage: 1, //默认处于哪一页
-			showTotal: false, //是否在分页按钮左侧显示数据总量
-			showTo: false, //是否在分页按钮右侧显示直接跳转至某一页
-			change: function(i) {
-				console.log("第几页" + i);
-				//自己后台拉数据 app.$data.tbs
-
-			}
-		});
-	});
-
-	function getSelData(isClick) {
-		var str = "<option value='总花费'>总花费</option>";
-		if (isClick) {
-			str += "<option value='曝光率'>曝光率</option>";
-		} else {
-			str += "<option value='曝光率' selected='seleced'>曝光率</option>";
-		}
-		if (isClick) {
-			str += "<option value='点击量' selected='seleced'>点击量</option>";
-		} else {
-			str += "<option value='点击量'>点击量</option>";
-		}
-
-		str += "<option value='点击率'>点击率</option>";
-		str += "<option value='点击均价'>点击均价</option>";
-		str += "<option value='领取数量'>领取数量</option>";
-		str += "<option value='核销数量'>核销数量</option>";
-		str += "<option value='支付金额'>支付金额</option>";
-		str += "<option value='优惠金额'>优惠金额</option>";
-		return str;
-
-	}
-
-	//自己组下拉数据
-	function getMYSelect() {
-		var str = "<option value=''>全部营销任务</option>";
-		for (var i = 0; i < 20; i++) {
-			str += "<option value='营销任务" + i + "'>营销任务" + i + "</option>"
-		}
-		$("#bb").html(str);
-
-	}
-	//表格数据
-	function makeData() {
-		var arr = [];
-		for (var i = 0; i < 8; i++) {
-			var item = {};
-			item.id = i;
-			item.sj = "2019-01-0" + i;
-			item.yxrwmc = i + "推广任务-20190101"
-			item.hf = 12.00;
-			item.bgl = 12;
-			item.djl = 30;
-			item.djv = 12;
-			item.djjj = 123;
-			item.lql = 12;
-			item.hxl = 123;
-			item.zfje = 123;
-			item.yhje = 20;
-			arr.push(item);
-		}
-		return arr;
-	}
-
-	function initDateUI() {
-		var obj = {};
-		obj.tbs = makeData();
-		obj.tbs1 = makeData();
-		obj.dateRate = [];
-		obj.dynamicTags = [
-		];
-
-		obj.options = [{
-			value: '1',
-			label: '推广计划_20191011'
-		}, {
-			value: '2',
-			label: '推广计划_20191012'
-		}, {
-			value: '3',
-			label: '推广计划_20191013'
-		}, {
-			value: '4',
-			label: '推广计划_20191014'
-		}, {
-			value: '5',
-			label: '推广计划_20191015'
-		}];
-		obj.value = ''
-		app = new Vue({
-			el: "#cnt",
-			data: function() {
-				obj.defaultProps = {
-						children: 'children',
-						label: 'label'
-					},
-					obj.pickerOptions = {
-						onPick: ({
-							maxDate,
-							minDate
-						}) => {
-
-							this.pickerMinDate = minDate.getTime()
-							if (maxDate) {
-								this.pickerMinDate = ''
-							}
-						},
-						disabledDate: (time) => {
-
-						}
-					}
-				return obj;
-			},
-
-			methods: {
-				handleClose(tag) {
-			        var idx = 0;
-					var that = this;
-					this.dynamicTags.map(function(item){
-						if(item.value == tag.value) {
-							app.$data.dynamicTags.splice(idx,1);
-						    that.queryData();
-						}
-						idx++;
-					});
-					
-				},
-				addTag(){
-					var that = this;
-					this.$data.options.map(function(item){
-						 if(item.value == app.$data.value) {
-							 var hadItem = false;
-							 app.$data.dynamicTags.map(function(item2){
-								 if(item2.value == item.value) {
-									 hadItem = true;
-								 }
-							 });
-							 if(!hadItem) {
-								 app.$data.dynamicTags.push(item);
-								 that.queryData();
-							 }
-							 app.$data.value = '';
-							 return;
-						 }
-					})
-					
-				},
-				queryData(){
-					//查询数据
-					console.log(app.$data.dynamicTags);
-					console.log(app.$data.dateRate);
-					console.log($("#p2").val());
-				}
-			}
-		});
-	}
-</script>
