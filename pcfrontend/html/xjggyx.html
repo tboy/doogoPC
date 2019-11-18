@@ -139,7 +139,7 @@
 					<div class="row">
 						<label class="lb">&nbsp;</label>
 						<div class="rg">
-							已选择 2个
+						
 						</div>
 
 					</div>
@@ -329,7 +329,7 @@
 <script src="../js/selectTree.js"></script>
 <script src="../js/interest.js"></script>
 <script src="../js/mediaData.js"></script>
-
+<script src="../js/zoneData.js"></script>
 <script>
 	var app;
 	$(function() {
@@ -344,13 +344,19 @@
 		obj.zys = '';
 		obj.ys = '';
 		obj.type = 0;
+		
 		obj.media = mediaData;
 		obj.selMedia = [];
 		obj.isMedia = false;
+		
 		obj.area = [];
+		obj.areaData = zoneData;
+		
+		
 		obj.ins = interestData;
 		obj.selIns = [];
 		obj.isIns = false;
+		
 		obj.sex = 0;
 		obj.age = [];
 		obj.income = [];
