@@ -134,14 +134,14 @@ UploadBase64.prototype._handelSelectFile = function (ev) {
 
     console.log(file);
 
-    if (file.size > 300*1024) {
- $("#file").val(null);
-			   $("#file").val('');
-        alert('选择文件大于' + 300  + 'kb，请重新选择');
-
-        return;
-
-    }
+//     if (file.size > 300*1024) {
+//  $("#file").val(null);
+// 			   $("#file").val('');
+//         alert('选择文件大于' + 300  + 'kb，请重新选择');
+// 
+//         return;
+// 
+//     }
 
  
 
@@ -307,25 +307,25 @@ UploadBase64.prototype._drawImage = function (img, callback) {
      var isMatch=false;
     var w =  img.width;
     var  h =  img.height;
-	if(this.isMatch800_800) {
-		
-    if(w==800 && h==800){
-            isMatch = true;
-    }
-   }
-   if(this.isMatch750_1536) {
-   		
-    if(w==750 && h<=1536){
-            isMatch = true;
-    }
-   }
-   
-    if(!isMatch){
-		 $("#file").val(null);
-		 $("#file").val('');
-        alert("尺寸不正确");
-       return;
-   }
+// 	if(this.isMatch800_800) {
+// 		
+//     if(w==800 && h==800){
+//             isMatch = true;
+//     }
+//    }
+//    if(this.isMatch750_1536) {
+//    		
+//     if(w==750 && h<=1536){
+//             isMatch = true;
+//     }
+//    }
+//    
+//     if(!isMatch){
+// 		 $("#file").val(null);
+// 		 $("#file").val('');
+//         alert("尺寸不正确");
+//        return;
+//    }
     this.sw = img.width;
 
     this.sh = img.height;

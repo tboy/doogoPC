@@ -53,7 +53,7 @@
 								<el-tag :key="index" v-for="(tag,index) in dynamicTags" closable :disable-transitions="false" @close="handleClose(tag)">
 									{{tag.label}}
 								</el-tag>
-
+                                <span style="margin-left:5px;" v-if="dynamicTags.length>0"></span>
 
 								<el-select v-model="value" @change="addTag" @focus="vFocus" @visible-change="vcHandel($event,this)"  filterable :placeholder="placeholder">
 									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -90,7 +90,7 @@
 					</div>
 					
 
-					<div id="line" style="margin-top:20px;width:98%;height:400px;border: 1px solid #ccc;">
+					<div id="line" style="margin-top:40px;width:98%;height:400px;border: 1px solid #ccc;">
 						<div id="container" style="height: 100%"></div>
 						<!-- <iframe id="frame" onLoad="setOpt();" src="line-simple.html" style="width:100%;height:400px;    margin-top: -30px;"></iframe> -->
 					</div>
@@ -99,7 +99,7 @@
 
 					<div style="margin-top:20px;margin-bottom: 10px;">营销任务汇总表</div>
 					<table class="tbl" style="text-align: right;">
-						<tr class="header-table-head">
+						<tr class="header-table-head tblc1">
 
 							<td style="padding-left:20px;text-align: left;">营销任务名称</td>
 							<td>花费</td>
@@ -143,7 +143,7 @@
 							<td style="padding-right:20px;">优惠金额</td>
 						</tr>
 						<template v-for="(item,idx) in tbs1">
-							<tr class="dt">
+							<tr class="dt" :style="(tbs1.length-1 != idx && tbs1[idx+1].sj=='')?'border-bottom:0':''">
 								<td style="padding-left:20px;text-align: left;">{{item.sj}}</td>
 								<td  style="text-align: left;">{{item.yxrwmc}}</td>
 								<td>{{item.hf}}</td>
@@ -384,8 +384,16 @@
 	}
 	
 	function updateTable(){
-		app.$data.tbs = makeData();
-		app.$data.tbs1 = makeData();
+		var arr = makeData();
+		var t1 = [];
+		t1[0] = arr[0];
+		t1[1] = arr[1];
+		t1[2] =arr[2];
+		t1[0].yxrwmc = '汇总';
+		app.$data.tbs =t1 ;
+		var arr2 = makeData();
+		arr2[1].sj = '';
+		app.$data.tbs1 = arr2;
 	}
 	
 	function updateChart(){
@@ -400,11 +408,15 @@
 		echart.setOption(option,true);
 		$("canvas").css("position", "absolute");
 		$("canvas").css("left", "40px");
-		$("canvas").css("top", "280px");
+		$("canvas").css("top", "300px");
 		
 	}
 </script>
 <style>
+	
+	.dt:hover{
+		background: #f5f5f5;
+	}
 .el-input__inner::-webkit-input-placeholder {
   color: #086a8b;
   text-align:center;
