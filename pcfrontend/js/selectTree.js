@@ -53,6 +53,7 @@ Vue.component('select-tree', {
   template: selectTreeTemplate,
   mounted () {
     /* 有效字段: level name parent_name */
+	
     this.createLevel('', 0);
     this.showTree('', 0);
   },
@@ -64,6 +65,7 @@ Vue.component('select-tree', {
   methods:{
     /* 递归生成级别level */
     createLevel (parent_name, level) {
+		
       const column = []
       /* 生成对应parent_name的数组，列数据 */
       for(let item of this.treeDataArr){
@@ -89,11 +91,12 @@ Vue.component('select-tree', {
         /* level: 该级别等级 */
         const level = result[0].level;
         this.treeColumnArr[level] = result;
+		
         /* 递归生成下级选项数组 */
         this.showTree(result[0].name, level);
       } else {
         /* 无下级选项，下级设置为空 */
-        this.treeColumnArr[parent_level + 1] = [];
+       // this.treeColumnArr[parent_level + 1] = [];
       }
       this.treeColumnArr = this.treeColumnArr.slice(0);
       /*console.log('treeColumnData-', this.treeColumnArr);*/
@@ -104,6 +107,7 @@ Vue.component('select-tree', {
       //   })[0]
       //   this.treeColumnArr = this.treeColumnArr.slice(0)
       // }
+	
     },
     changeTreeSelect2 (item) {
       console.log(item);

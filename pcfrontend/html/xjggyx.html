@@ -17,11 +17,12 @@
 		<link rel="stylesheet" href="../css/myTaskCom.css">
 		<link rel="stylesheet" href="../css/myTask3.css">
 		<link rel="stylesheet" href="../css/element-ui/index.css">
-<link rel="stylesheet" href="../css/page-forminfo.css" >
+		<link rel="stylesheet" href="../css/page-forminfo.css">
 		<script src="../js/jquery.min.js"></script>
 		<script src="../css/element-ui/vue.js"></script>
 		<script src="../css/element-ui/index.js"></script>
-
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=LX2BZ-XEXC4-R4GUF-XF6QZ-PGDKO-OIBOD"></script>
+<script src="../js/qqMapConfig-a.js"></script>
 	</head>
 	<body>
 		<div class="myContent">
@@ -109,7 +110,7 @@
 					<div v-if="isMedia" class="row">
 						<label class="lb">&nbsp;</label>
 						<div class="rg">
-							<select-tree :data="media" @change="mediaChange" propname="media" >
+							<select-tree :data="media" @change="mediaChange" propname="media">
 							</select-tree>
 						</div>
 
@@ -117,9 +118,9 @@
 
 					<div class="row">
 						<label class="lb"><span style="color:red;">*</span>地域</label>
-						<div class="rg">
+						<div class="rg" style="padding-top: 6px;">
 							<div class="radio" style="float:left;margin-right:3rem;">
-								<input id="radio-4" name="area" type="radio" checked="checked" @click="changeArea" value="0" v-model="area">
+								<input id="radio-4" name="area" type="radio" checked="checked" @click="changeArea" value="0" checked="checked" v-model="area">
 								<label for="radio-4" class="radio-label">不限</label>
 							</div>
 							<div class="radio" style="float:left;margin-right:3rem;">
@@ -132,17 +133,29 @@
 							</div>
 
 							<br />
-							<button class="value_button next" onClick="show();" style="color:#666666;background: white;border:1px solid #e5e5e5;border-radius: 5px;margin-left: 0;">
-								选择地域</button>
+
 						</div>
 					</div>
+					<template v-if="area == 1">
 					<div class="row">
 						<label class="lb">&nbsp;</label>
 						<div class="rg">
-						
+							<select-tree @change='xqVal' :data="areaData">
+							</select-tree>
 						</div>
 
 					</div>
+					</template>
+
+					<template v-if="area == 2">
+					<div class="row">
+						<label class="lb">&nbsp;</label>
+						<div class="rg">
+							<select-map :data="zone"  @change="changeToFormValue"></select-map>
+						</div>
+
+					</div>
+					</template>
 
 					<div class="row">
 						<label class="lb">兴趣</label>
@@ -154,8 +167,8 @@
 					<div v-if="isIns" class="row">
 						<label class="lb">&nbsp;</label>
 						<div class="rg">
-							
-							<select-tree  @change='xqVal' :data="ins">
+
+							<select-tree @change='xqVal' :data="ins">
 							</select-tree>
 						</div>
 
@@ -163,7 +176,7 @@
 
 					<div class="row">
 						<label class="lb">性别</label>
-						<div class="rg">
+						<div class="rg"  style="padding-top: 6px;">
 							<div class="radio" style="float:left;margin-right:3rem;">
 								<input id="radio-7" name="sex" type="radio" checked="checked" value="0" v-model="sex">
 								<label for="radio-7" class="radio-label">不限</label>
@@ -182,7 +195,7 @@
 
 					<div class="row">
 						<label class="lb">年龄</label>
-						<div class="rg">
+						<div class="rg"  style="padding-top: 6px;">
 							<div style="float:left;">
 								<label class="checkbox_box">
 									<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' v-model="age" value="0" />
@@ -244,7 +257,7 @@
 
 					<div class="row">
 						<label class="lb">收入水平</label>
-						<div class="rg">
+						<div class="rg"  style="padding-top: 6px;">
 							<div style="float:left;">
 								<label class="checkbox_box">
 									<input style="margin-left: 0px;" type="checkbox" name="type" class='cb' v-model="income" value="0"><span>
@@ -280,7 +293,7 @@
 
 				<div v-for="(item,index) in scArr" class="myCont" style="margin-left:150px;margin-top:40px;">
 					<div class="row">
-						<label class="lb">{{item.name}}</label>
+						<label class="lb" style="font-weight: 600 !important;">{{item.name}}</label>
 						<div class="rg">
 
 						</div>
@@ -298,7 +311,7 @@
 						<label class="lb"><span style="color:red;">*</span>落地页地址</label>
 						<div class="rg">
 							<span class="form_input_box" style="width:350px;">
-								<input type="text" placeholder='落地页地址' v-model="item.path"  class="frm_input">
+								<input type="text" placeholder='落地页地址' v-model="item.path" class="frm_input">
 							</span>
 						</div>
 					</div>
@@ -314,14 +327,18 @@
 						<label class="lb"><span style="color:red;">*</span>上传图片</label>
 						<div class="rg">
 
-							<button class="value_button next"  style="color:#666666;background: white;border:1px solid #e5e5e5;border-radius: 5px;margin-left: 0;">
-								选择图片</button>
+							<button class="value_button next" @click="upFile(item)" style="color:#666666;background: white;border:1px solid #e5e5e5;border-radius: 5px;margin-left: 0;">
+								选择图片</button><span style="line-height: 30px;padding-left: 10px;">图片尺寸{{item.width+'x'+item.height}}像素</span>
+								<br>
+								<br>
+								
+								<img v-if="item.img.length>0" style="width:80px;height:80px;" :src="item.img[0]" alt="">
 						</div>
 					</div>
 
 				</div>
-
-				<button class="value_button next" onClick="next();" style="margin-left: 306px;margin-top:30px;margin-bottom: 30px;">下一步</button>
+                 <input type="file" style="display:none;" id="file" />
+				<button class="value_button next" onClick="next();" style="margin-left: 306px;margin-top:30px;margin-bottom: 30px;">提交</button>
 
 			</div>
 	</body>
@@ -330,12 +347,16 @@
 <script src="../js/interest.js"></script>
 <script src="../js/mediaData.js"></script>
 <script src="../js/zoneData.js"></script>
+<script src="../js/UploadBase64Free.js"></script>
 <script>
 	var app;
+	var u = null;
 	$(function() {
 		initVue();
+        initFile();
+		
 	});
-	
+
 
 	function initVue() {
 		var obj = {};
@@ -344,26 +365,27 @@
 		obj.zys = '';
 		obj.ys = '';
 		obj.type = 0;
-		
+
 		obj.media = mediaData;
 		obj.selMedia = [];
 		obj.isMedia = false;
-		
-		obj.area = [];
+
+		obj.area = 0;
 		obj.areaData = zoneData;
-		
-		
+        obj.zone = [];
+
 		obj.ins = interestData;
 		obj.selIns = [];
 		obj.isIns = false;
-		
+
 		obj.sex = 0;
 		obj.age = [];
 		obj.income = [];
-		
+
 		obj.materials = [];
-		
-		obj.scArr=[];
+
+		obj.scArr = [];
+		obj.scItem = {};//上传图片时临时用
 		app = new Vue({
 			el: "#ct",
 			data: function() {
@@ -388,59 +410,135 @@
 					}
 				return obj;
 			},
-			methods:{
-				cutTxt(){
-				  app.$data.adWord = app.$data.adWord.substring(0,30);	
+			methods: {
+				cutTxt() {
+					app.$data.adWord = app.$data.adWord.substring(0, 30);
 				},
-				changeArea(){
-					
+				changeArea() {
+
 				},
-				mediaSel(){
+				mediaSel() {
 					app.$data.media = mediaData;
 					app.$data.selMedia = [];
 					app.$data.isMedia = !app.$data.isMedia;
 				},
-				mediaChange(e,val){
+				mediaChange(e, val) {
 					app.$data.selMedia = val;
-					var ele= val.map(function(item){
+					var ele = val.map(function(item) {
 						var obj = {};
 						obj.item = item;
 						obj.name = item.name;
-						obj.txt="111";
-						obj.scName = '111';
-						obj.path = '111';
+						obj.txt = "";
+						obj.scName = '';
+						obj.path = '';
 						obj.img = [];
+						obj.width = 600;
+                        obj.height = 800;
 						return obj;
 					});
-					app.$set(app.$data,'scArr',ele);
-					 
+					app.$set(app.$data, 'scArr', ele);
+
 				},
-				insSel(){
+				insSel() {
 					app.$data.ins = interestData;
 					app.$data.selIns = [];
 					app.$data.isIns = !app.$data.isIns;
 				},
-				xqVal(e,val){
+				xqVal(e, val) {
 					app.$data.selIns = val;
-				}
+				},
+				changeToFormValue(property, val) {
+					app.$data.zone = val;
+					// console.log(this.formData[property])
+				},
+				upFile(item){
+					u.matchHeight = item.height;
+					u.matchWidth = item.width;
+					app.$data.scItem = item;
+					$('#file').trigger('click');
+				  
+				},
 			}
 		});
 	}
-	
-	function next(){
+
+	function next() {
+		
+		var obj = app.$data;
+		if(obj.adWord == ""){
+		   alert("请输入广告名称");
+		   return;
+		}
+		if(obj.dateRate.length==0){
+			alert("请输入投放时间");
+			return;
+		}
+		if(obj.zys == ''){
+			alert("请输入投放总预算");
+			return;
+		}
+		if(obj.ys == ''){
+			alert("请输入每日预算");
+			return;
+		}
+		if(obj.selMedia.length==0){
+			alert("请选择媒体");
+			return;
+		}
+		for(var i = 0;i<obj.scArr.length;i++){
+			var temp = obj.scArr[i];
+			if(temp.scName == '' || temp.path =='' || temp.img.length == 0){
+				alert("请填写上传素材内容");
+				return;
+			}
+		}
+		//提交资料
 		console.log(app.$data);
+		
+	}
+	function initFile() {
+	   u = new UploadBase64();
+	
+		u.init({
+	
+			input: document.querySelector('#file'),
+	
+			callback: function(base64) {
+				//console.log("bb:"+base64);
+				
+				app.$data.scItem.img[0] = base64;
+				let adWord = app.$data.adWord;
+				app.$data.adWord= '666';
+				app.$data.adWord= adWord;
+	
+			},
+	
+			loading: function() {
+	
+	
+	
+			}
+	
+		});
 	}
 </script>
 <style>
-	label{
+	.checkbox_box {
+    font-weight: inherit;
+    width: 135px;
+}
+	label {
 		font-weight: 100 !important;
 	}
-	.total-select{
-		margin-bottom:10px;
+
+	.total-select {
+		margin-bottom: 10px;
 	}
-	.select-tree-module{
-		width:400px;
-		}
+
+	.select-tree-module {
+		width: 400px;
+	}
+
 	.lb {
 		margin-right: 30px;
 		color: #666;
