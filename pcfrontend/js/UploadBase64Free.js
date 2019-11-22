@@ -308,7 +308,7 @@ UploadBase64.prototype._drawImage = function (img, callback) {
     var w =  img.width;
     var  h =  img.height;
 	if(this.matchWidth !=null && this.matchHeight != null) {
-		 if(w == this.maxWidth && this.matchHeight == h) {
+		 if(w == this.matchWidth && this.matchHeight == h) {
 	         console.log("符合尺寸：(width:"+w+":height"+h);		 
 		 }else{
 			 isMatch = false;

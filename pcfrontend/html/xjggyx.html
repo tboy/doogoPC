@@ -345,16 +345,17 @@
 							</span>
 						</div>
 					</div>
-					<div class="row">
+					
+					<div v-for="(imgItem,idx) in item.img"class="row">
 						<label class="lb"><span style="color:red;">*</span>上传图片</label>
 						<div class="rg">
 
-							<button class="value_button next" @click="upFile(item)" style="color:#666666;background: white;border:1px solid #e5e5e5;border-radius: 5px;margin-left: 0;">
-								选择图片</button><span style="line-height: 30px;padding-left: 10px;">图片尺寸{{item.width+'x'+item.height}}像素</span>
+							<button class="value_button next" @click="upFile(item,idx)" style="color:#666666;background: white;border:1px solid #e5e5e5;border-radius: 5px;margin-left: 0;">
+								选择图片</button><span style="line-height: 30px;padding-left: 10px;">图片尺寸{{imgItem.width+'x'+imgItem.height}}像素</span>
 							<br>
 							<br>
 
-							<img v-if="item.img.length>0" style="width:80px;height:80px;" :src="item.img[0]" alt="">
+							<img  style="width:80px;height:80px;" :src="imgItem.path" alt="">
 						</div>
 					</div>
 
@@ -457,9 +458,8 @@
 						obj.txt = "";
 						obj.scName = '';
 						obj.path = '';
-						obj.img = [];
-						obj.width = 600;
-						obj.height = 800;
+						obj.img = [{path:'',width:30,height:28},{path:'',width:800,height:800}];
+						
 						return obj;
 					});
 					app.$set(app.$data, 'scArr', ele);
@@ -477,10 +477,12 @@
 					app.$data.zone = val;
 					// console.log(this.formData[property])
 				},
-				upFile(item) {
-					u.matchHeight = item.height;
-					u.matchWidth = item.width;
+				upFile(item,idx) {
+					u.matchHeight = item.img[idx].height;
+					u.matchWidth = item.img[idx].width;
+					item.idx=idx;
 					app.$data.scItem = item;
+					
 					$('#file').trigger('click');
 
 				},
@@ -556,7 +558,7 @@
 			callback: function(base64) {
 				//console.log("bb:"+base64);
 
-				app.$data.scItem.img[0] = base64;
+				app.$data.scItem.img[app.$data.scItem.idx].path = base64;
 				let adWord = app.$data.adWord;
 				app.$data.adWord = '666';
 				app.$data.adWord = adWord;
