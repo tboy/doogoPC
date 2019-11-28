@@ -133,15 +133,13 @@ UploadBase64.prototype._handelSelectFile = function (ev) {
     }
 
     console.log(file);
+       if(this.matchSize && file.size > this.matchSize*1024){
+		   $("#file").val(null);
+		    $("#file").val('');
+			alert('选择文件大于' + this.matchSize  + 'kb，请重新选择');
+			return;
+	   }
 
-//     if (file.size > 300*1024) {
-//  $("#file").val(null);
-// 			   $("#file").val('');
-//         alert('选择文件大于' + 300  + 'kb，请重新选择');
-// 
-//         return;
-
-  //  }
 
  
 
@@ -298,6 +296,7 @@ UploadBase64.prototype._createImage = function (uri) {
 
 */
 
+UploadBase64.prototype.matchSize = null;
 UploadBase64.prototype.matchWidth = null;
 
 UploadBase64.prototype.matchHeight = null;
@@ -307,14 +306,19 @@ UploadBase64.prototype._drawImage = function (img, callback) {
      var isMatch=true;
     var w =  img.width;
     var  h =  img.height;
-	if(this.matchWidth !=null && this.matchHeight != null) {
-		 if(w == this.matchWidth && this.matchHeight == h) {
-	         console.log("符合尺寸：(width:"+w+":height"+h);		 
-		 }else{
-			 isMatch = false;
-		 }
+	
+	if(this.matchWidth && w!=this.matchWidth) {
+		isMatch = false;
+	}else if(this.maxWidth<w){
+		isMatch = false;
 	}
 	
+	if(this.matchHeight && this.matchHeight != h) {
+		isMatch = false;
+	}else if(this.maxHeight<h){
+		isMatch = false;
+	}
+
     if(!isMatch){
 		 $("#file").val(null);
 		 $("#file").val('');
