@@ -88,16 +88,24 @@ function addResult(name, result) {
 	var results = [];
 	var resultObj = x2js.xml_str2json(result);
 	results.unshift(resultObj);
-    JSON.stringify(resultObj);
+    console.log(JSON.stringify(resultObj));
 	var isPass = true;
 	var arrs = resultObj.File.track;
+	
+	//时长：6-15秒
 	var duration = arrs[0].Duration;
 	duration = parseInt(duration.substr(0, duration.indexOf("s")));
-	//时长：6-15秒
 	if (duration < 6 || duration > 15) {
 		isPass = false;
 	}
 
+    //视频编码：H.264/AVC
+    var videoFormat = arrs[1].Format;
+	if(videoFormat == "AVC" || videoFormat == "H.264") {
+		
+	}else{
+		isPass = false;
+	}
 
 
 
