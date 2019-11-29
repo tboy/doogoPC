@@ -275,7 +275,7 @@
 															<div class="upload-item flex">
 																<div class="upload flex flexAtcent flexJcent">
 																	<div class="pic flex flexAtcent flexJcent" :onClick="'upFile('+index+')'">
-																		<img style="width:80px;height:80px;" :src="item.src==''?'../images/upload-pic.png':item.src" alt=""></div>
+																		<img style="width:230px;height:80px;" :src="item.src==''?'../images/upload-pic.png':item.src" alt=""></div>
 																</div>
 																<div class="dd-handle dd3-handle"><img draggable="false" src="../images/handle-icon.png" alt=""></div>
 																<div class="delete" :onClick="'javascript:app.$data.myTools.splice('+index+',1);'">
@@ -336,7 +336,7 @@
 														<li class="item dd-item dd3-item" :idx="index" data-id="16">
 
 															<div class="upload-item flex">
-																<div class="select-kaquan" style="height:46px;">{{item.door.title}}<br />{{item.door.address}}</div>
+																<div class="select-kaquan" style="height:60px;">{{item.door.title}}<br />{{item.door.address}}</div>
 																<div class="dd-handle dd3-handle"><img draggable="false" src="../images/handle-icon.png" alt=""></div>
 																<div class="delete" :onClick="'javascript:app.$data.myTools.splice('+index+',1);'"><img src="../images/delete-icon.png"
 																	 alt=""></div>

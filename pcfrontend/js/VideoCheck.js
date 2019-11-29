@@ -106,9 +106,57 @@ function addResult(name, result) {
 	}else{
 		isPass = false;
 	}
+	//格式类型：Main Profile
+
+	
+    //分辨率：640×360px
+    if(parseInt(arrs[1].Width) ==640 && parseInt(arrs[1].Height) ==360) {
+		
+	}else{
+		isPass = false;
+	}
+	
+	//采样纵横比：1:1
 
 
+    //文件大小：≤ 1.7MB
+	if(parseInt(arrs[0].File_size) > (1024*1.7)) {
+		isPass = false;
+	}
 
+    //视频码率：≤ 800 kbit/s
+	if(parseInt(arrs[1].Bit_rate)>800){
+		isPass = false;
+	}
 
+    //帧率推荐： 24 fps
+	
+    //音频格式：AAC
+    if(arrs[2].Format != "AAC"){
+		isPass = false;
+	}
+    //音频格式类型：LC
+	if(arrs[2].Format_profile.indexOf("LC") ==-1){
+		isPass = false;
+	}
+
+    //音频码率：≤ 96 kbit/sec
+     if(parseInt(arrs[2].Bit_rate)>96){
+		 isPass = false;
+	 }
+    //音频采样率推荐：44.1 kHz
+
+    //Scan type：progressive
+
+    //音画时差：< 0.5 秒
+
+    //Standard：非PAL
+
+    if(!isPass){
+		alert("视频格式不正确！");
+		app.$data.myTools[videoPos].src = '';
+		$("#videos").val(null);
+		$("#videos").val('');
+	}
 
 }
