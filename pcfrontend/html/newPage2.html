@@ -297,7 +297,7 @@
 																<div style="width:100%;height:100%;">
 																<span>{{item.vo.title}}</span>
 																<br/>
-																<img style="width:100%;height:80px;" :src="item.src==''?'../images/upload-pic.png':item.src" alt="">
+																<img v-if="item.src!=''" style="width:100%;height:80px;" :src="item.src==''?'../images/upload-pic.png':item.src" alt="">
 																</div>
 																</div>
 																<div class="dd-handle dd3-handle"><img draggable="false" src="../images/handle-icon.png" alt=""></div>
@@ -348,11 +348,49 @@
 													
 													<template v-if="item.type == 6" v-cloak>
 														<li class="item dd-item dd3-item" :idx="index" data-id="16">
-													
 															<div class="upload-item flex">
-																<video style="width: 100%;height:100%;" :src="item.src"></video>
+																<div class="select-kaquan" :style="item.src!=''?'height:180px;':''" >
+																	 <a v-if="item.src==''" :href="'javascript:addVideo('+index+')'" style="color:#666;padding:0;margin:0;">上传视频</a>
+																	<video v-if="item.src!=''" style="width:100% !important;height: 100% !important;max-height: 100% !important;max-width: 100% !important;min-height: 100% !important;" controls="controls" :src="item.src"></video>
+																</div>
+																
+																<div class="dd-handle dd3-handle"><img draggable="false" src="../images/handle-icon.png" alt=""></div>
+																<div class="delete" :onClick="'javascript:app.$data.myTools.splice('+index+',1);'"><img src="../images/delete-icon.png"
+																	 alt=""></div>
 															</div>
+													<div class="upload-explain">
+														<p>6-15秒视频自动循环播放</p>
+														<p>视频尺寸：640像素 x 360像素</p>
+														<p>视频大小：文件大小不超过≤ 1.7MB</p>
+														<p style="cursor: pointer;" :onClick="'javascript:app.$data.myTools['+index+'].isShow = !app.$data.myTools['+index+'].isShow'">详细规范▼</p>
+													</div>
+													<div v-if="item.isShow" class="upload-explain" style="width:200px;padding:10px;border:1px solid #e5e5e5;">
+														<p>时长：6-15秒</p>
+														<p>格式：MP4</p>
+														<p>视频编码：H.264/AVC</p>
+														<p>格式类型：Main Profile</p>
+														<p>分辨率：640×360px</p>
+														<p>采样纵横比：1:1</p>
+														<p>文件大小：≤ 1.7MB</p>
+														<p>视频码率：≤ 800 kbit/s</p></p>
+														<p>帧率推荐： 24 fps</p>
+														<p>音频格式：AAC</p>
+														<p>音频格式类型：LC</p>
+														<p>音频码率：≤ 96 kbit/sec</p>
+														<p>音频采样率推荐：44.1 kHz</p>
+														<p>Scan type：progressive</p>
+														<p>音画时差：< 0.5 秒</p>
+														<p>Standard：非PAL</p>
+														<p>声道：单声道、立体声</p>
+													</div>
 													
+
+
+
+
+
+
+
 														</li>
 													</template>
 
@@ -490,6 +528,8 @@
 			</div>
 		</div>
 
+
+          <input type="file" style="display:none;" id="videos" onchange="changeFile(this)" accept=".mp4">
 	</body>
 </html>
 
@@ -498,6 +538,12 @@
 <script src="../js/UploadBase64Free.js"></script>
 <script src="../js/layer/layer.js"></script>
 <script src="../js/newPage.js"></script>
+
+<script src="../js/mediainfo/mediainfo.js"></script>
+<script src="../js/mediainfo/xml2json.js"></script>
+<script src="../js/VideoCheck.js"></script>
+
+
 <script>
 	function addItem() {
 
@@ -508,7 +554,7 @@
 		$('.addSelect').val(0);
 		if (item.type == '1') {
 			item.val = '';
-			item.sel = '2'
+			item.sel = '2';
 		}
 		if (item.type == '2') {
 			item.src = '';
@@ -527,7 +573,8 @@
 			return;
 		}
 		if(item.type == "6") {
-			addVideo();
+			item.src='';
+			item.isShow = false;
 		}
 
 
@@ -540,6 +587,21 @@
 
 
 		}, 10);
+	}
+	
+	var videoPos;
+	function addVideo(videoIdx){
+		videoPos = videoIdx;
+		$("#videos").trigger("click");
+		
+	}
+	function changeFile(val){
+		var video = val.files[0];
+		
+		var url = URL.createObjectURL(video);
+		app.$data.myTools[videoPos].src = url;
+		
+		parseFile(video);
 	}
 
 	function sortViewItem() {
