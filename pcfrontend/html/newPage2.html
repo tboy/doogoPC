@@ -617,7 +617,7 @@
 		
 		var url = URL.createObjectURL(video);
 		app.$data.myTools[videoPos].src = url;
-		app.$data.myTools[videoPos].file = $(video).clone();
+		app.$data.myTools[videoPos].file = $(val).clone();
 		
 		parseFile(video);
 	}
