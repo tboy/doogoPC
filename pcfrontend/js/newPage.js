@@ -270,7 +270,7 @@ function addCard() {
 							obj.vo = item;
 							obj.sel = '1';
 							obj.type = '3';
-							obj.src = '';
+							obj.src = '../images/1.jpg';
 							obj.key = app.$data.myTools.length;
 							app.$data.myTools.push(obj);
 							setTimeout(function() {
