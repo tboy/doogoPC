@@ -287,7 +287,7 @@
 																	<div class="upload flex flexAtcent flexJcent" style="height: auto;">
 																		<div class="flex flexAtcent flexJcent" :onClick="'upFile('+index+')'">
 																			
-																			 <img style="max-width:230px;" :src="item.src==''?'../images/upload-pic.png':item.src" alt="">
+																			 <img style="max-width:230px;margin: 20px 0;" :src="item.src==''?'../images/upload-pic.png':item.src" alt="">
 																			
 																			</div>
 																	</div>
@@ -310,7 +310,7 @@
 														<li class="item dd-item dd3-item" :idx="index" data-id="16">
 
 															<div class="upload-item flex">
-																<div class="select-kaquan" style="height:120px;">
+																<div class="select-kaquan" style="height: auto; max-width: 260px;">
 																<div style="width:100%;height:100%;">
 																<span style="text-align: center;width: 100%;display: block;margin: 5px 0px;">{{item.vo.title}}</span>
 															
@@ -320,7 +320,7 @@
 																<div class="dd-handle dd3-handle"><img draggable="false" src="../images/handle-icon.png" alt=""></div>
 																<div class="delete" :onClick="'javascript:app.$data.myTools.splice('+index+',1);'"><img src="../images/delete-icon.png"
 																	 alt=""></div>
-																<select class="modalitySelect" v-model="item.sel">
+																<select class="modalitySelect" :id="'defColor'+index" :onChange="'changeImg('+index+')'" v-model="item.sel">
 																	<option value="1">红色</option>
 																	<option value="2">绿色</option>
 																	<option value="3">黄色</option>
@@ -617,10 +617,15 @@
 		
 		var url = URL.createObjectURL(video);
 		app.$data.myTools[videoPos].src = url;
+		app.$data.myTools[videoPos].file = $(video).clone();
 		
 		parseFile(video);
 	}
 
+   function changeImg(idx){
+	   
+	   app.$data.myTools[idx].src="../images/"+ $("#defColor"+idx).val()+".jpg";
+   }
 	function sortViewItem() {
 		var arr = [];
 		$('.item').each(function() {
@@ -682,6 +687,21 @@
 		$("#showArea").is(':checked');
 		$("#showPhone").is(':checked');
 
+var formdata=new FormData();
+//通过append()方法在末尾追加key为name值为laoliu的数据
+formdata.append("name","laoliu");
+
+ var xhr=new XMLHttpRequest();
+	xhr.open("post","http://127.0.0.1/adv");
+	xhr.open('POST', url, true);
+	xhr.setRequestHeader("Accept", "application/json");
+	xhr.send(formData); 
+    xhr.onload=function(){
+        if(xhr.status==200){
+            //...
+        }
+    }
+	
 	}
 	//再营销選擇
 	function cbVal(name) {
