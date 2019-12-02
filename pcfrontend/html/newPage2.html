@@ -274,26 +274,27 @@
 
 															<div class="upload-item flex">
 																<template v-if="item.src==''">
-																<div class="upload flex flexAtcent flexJcent">
-																	<div class="pic flex flexAtcent flexJcent" :onClick="'upFile('+index+')'">
-																		
-																		<img style="width:230px;height:80px;" :src="item.src==''?'../images/upload-pic.png':item.src" alt="">
-																		
+																	<div class="upload flex flexAtcent flexJcent">
+																		<div class="pic flex flexAtcent flexJcent" :onClick="'upFile('+index+')'">
+
+																			<img style="width:230px;height:80px;" :src="item.src==''?'../images/upload-pic.png':item.src" alt="">
+
 																		</div>
-																</div>
+																	</div>
 																</template>
-																
+
 																<template v-if="item.src!=''">
 																	<div class="upload flex flexAtcent flexJcent" style="height: auto;">
 																		<div class="flex flexAtcent flexJcent" :onClick="'upFile('+index+')'">
-																			
-																			 <img style="max-width:230px;margin: 20px 0;" :src="item.src==''?'../images/upload-pic.png':item.src" alt="">
-																			
-																			</div>
+
+																			<img style="max-width:230px;margin: 20px 0;" :src="item.src==''?'../images/upload-pic.png':item.src"
+																			 alt="">
+
+																		</div>
 																	</div>
-																 
+
 																</template>
-																
+
 																<div class="dd-handle dd3-handle"><img draggable="false" src="../images/handle-icon.png" alt=""></div>
 																<div class="delete" :onClick="'javascript:app.$data.myTools.splice('+index+',1);'">
 																	<img src="../images/delete-icon.png" alt=""></div>
@@ -311,11 +312,12 @@
 
 															<div class="upload-item flex">
 																<div class="select-kaquan" style="height: auto; max-width: 260px;">
-																<div style="width:100%;height:100%;">
-																<span style="text-align: center;width: 100%;display: block;margin: 5px 0px;margin-top:20px;">{{item.vo.title}}</span>
-															
-																<img v-if="item.src!=''" style="max-width:85%;margin: auto;margin-bottom:20px;display: block;" :src="item.src==''?'../images/upload-pic.png':item.src" alt="">
-																</div>
+																	<div style="width:100%;height:100%;">
+																		<span style="text-align: center;width: 100%;display: block;margin: 5px 0px;margin-top:20px;">{{item.vo.title}}</span>
+
+																		<img v-if="item.src!=''" style="max-width:85%;margin: auto;margin-bottom:20px;display: block;" :src="item.src==''?'../images/upload-pic.png':item.src"
+																		 alt="">
+																	</div>
 																</div>
 																<div class="dd-handle dd3-handle"><img draggable="false" src="../images/handle-icon.png" alt=""></div>
 																<div class="delete" :onClick="'javascript:app.$data.myTools.splice('+index+',1);'"><img src="../images/delete-icon.png"
@@ -362,45 +364,46 @@
 
 														</li>
 													</template>
-													
+
 													<template v-if="item.type == 6" v-cloak>
 														<li class="item dd-item dd3-item" :idx="index" data-id="16">
 															<div class="upload-item flex">
-																<div class="select-kaquan" :style="item.src!=''?'height:180px;':''" >
-																	 <a v-if="item.src==''" :href="'javascript:addVideo('+index+')'" style="color:#666;padding:0;margin:0;">上传视频</a>
-																	<video v-if="item.src!=''" style="width:100% !important;height: 100% !important;max-height: 100% !important;max-width: 100% !important;min-height: 100% !important;" controls="controls" :src="item.src"></video>
+																<div class="select-kaquan" :style="item.src!=''?'height:180px;':''">
+																	<a v-if="item.src==''" :href="'javascript:addVideo('+index+')'" style="color:#666;padding:0;margin:0;">上传视频</a>
+																	<video v-if="item.src!=''" style="width:100% !important;height: 100% !important;max-height: 100% !important;max-width: 100% !important;min-height: 100% !important;"
+																	 controls="controls" :src="item.src"></video>
 																</div>
-																
+
 																<div class="dd-handle dd3-handle"><img draggable="false" src="../images/handle-icon.png" alt=""></div>
 																<div class="delete" :onClick="'javascript:app.$data.myTools.splice('+index+',1);'"><img src="../images/delete-icon.png"
 																	 alt=""></div>
 															</div>
-													<div class="upload-explain">
-														<p>6-15秒视频自动循环播放</p>
-														<p>视频尺寸：640像素 x 360像素</p>
-														<p>视频大小：文件大小不超过≤ 1.7MB</p>
-														<p style="cursor: pointer;" :onClick="'javascript:app.$data.myTools['+index+'].isShow = !app.$data.myTools['+index+'].isShow'">详细规范▼</p>
-													</div>
-													<div v-if="item.isShow" class="upload-explain" style="width:200px;padding:10px;border:1px solid #e5e5e5;">
-														<p>时长：6-15秒</p>
-														<p>格式：MP4</p>
-														<p>视频编码：H.264/AVC</p>
-														<p>格式类型：Main Profile</p>
-														<p>分辨率：640×360px</p>
-														<p>采样纵横比：1:1</p>
-														<p>文件大小：≤ 1.7MB</p>
-														<p>视频码率：≤ 800 kbit/s</p></p>
-														<p>帧率推荐： 24 fps</p>
-														<p>音频格式：AAC</p>
-														<p>音频格式类型：LC</p>
-														<p>音频码率：≤ 96 kbit/sec</p>
-														<p>音频采样率推荐：44.1 kHz</p>
-														<p>Scan type：progressive</p>
-														<p>音画时差：< 0.5 秒</p>
-														<p>Standard：非PAL</p>
-														<p>声道：单声道、立体声</p>
-													</div>
-													
+															<div class="upload-explain">
+																<p>6-15秒视频自动循环播放</p>
+																<p>视频尺寸：640像素 x 360像素</p>
+																<p>视频大小：文件大小不超过≤ 1.7MB</p>
+																<p style="cursor: pointer;" :onClick="'javascript:app.$data.myTools['+index+'].isShow = !app.$data.myTools['+index+'].isShow'">详细规范▼</p>
+															</div>
+															<div v-if="item.isShow" class="upload-explain" style="width:200px;padding:10px;border:1px solid #e5e5e5;">
+																<p>时长：6-15秒</p>
+																<p>格式：MP4</p>
+																<p>视频编码：H.264/AVC</p>
+																<p>格式类型：Main Profile</p>
+																<p>分辨率：640×360px</p>
+																<p>采样纵横比：1:1</p>
+																<p>文件大小：≤ 1.7MB</p>
+																<p>视频码率：≤ 800 kbit/s</p>
+																</p>
+																<p>帧率推荐： 24 fps</p>
+																<p>音频格式：AAC</p>
+																<p>音频格式类型：LC</p>
+																<p>音频码率：≤ 96 kbit/sec</p>
+																<p>音频采样率推荐：44.1 kHz</p>
+																<p>Scan type：progressive</p>
+																<p>音画时差：< 0.5 秒</p> <p>Standard：非PAL</p>
+																<p>声道：单声道、立体声</p>
+															</div>
+
 
 
 
@@ -546,7 +549,7 @@
 		</div>
 
 
-          <input type="file" style="display:none;" id="videos" onchange="changeFile(this)" accept=".mp4">
+		<input type="file" style="display:none;" id="videos" onchange="changeFile(this)" accept=".mp4">
 	</body>
 </html>
 
@@ -589,8 +592,8 @@
 			showDoor();
 			return;
 		}
-		if(item.type == "6") {
-			item.src='';
+		if (item.type == "6") {
+			item.src = '';
 			item.isShow = false;
 		}
 
@@ -605,27 +608,65 @@
 
 		}, 10);
 	}
-	
+
 	var videoPos;
-	function addVideo(videoIdx){
+
+	function addVideo(videoIdx) {
 		videoPos = videoIdx;
 		$("#videos").trigger("click");
-		
+
 	}
-	function changeFile(val){
+
+	function changeFile(val) {
+		var path = getvl(val);
+		console.log(path);
 		var video = val.files[0];
-		
+		var size = video.size / 1024 / 1024;
+		if (size > 1.7) {
+			alert("视频不能大于1.7M");
+			return;
+		}
 		var url = URL.createObjectURL(video);
 		app.$data.myTools[videoPos].src = url;
 		app.$data.myTools[videoPos].file = $(val).clone();
-		
+
 		parseFile(video);
 	}
 
-   function changeImg(idx){
-	   
-	   app.$data.myTools[idx].src="../images/"+ $("#defColor"+idx).val()+".jpg";
-   }
+	function getvl(obj) {
+
+		var Sys = {};
+		var ua = navigator.userAgent.toLowerCase();
+		var s;
+		(s = ua.match(/msie ([\d.]+)/)) ? Sys.ie = s[1]:
+			(s = ua.match(/firefox\/([\d.]+)/)) ? Sys.firefox = s[1] :
+			(s = ua.match(/chrome\/([\d.]+)/)) ? Sys.chrome = s[1] :
+			(s = ua.match(/opera.([\d.]+)/)) ? Sys.opera = s[1] :
+			(s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
+		var file_url = "";
+		if (Sys.ie <= "6.0") {
+			//ie5.5,ie6.0
+			file_url = obj.value;
+		} else if (Sys.ie >= "7.0") {
+			//ie7,ie8
+			obj.select();
+			file_url = document.selection.createRange().text;
+		} else if (Sys.firefox) {
+			//fx
+			//file_url = document.getElementById("file").files[0].getAsDataURL();//获取的路径为FF识别的加密字符串
+			file_url = readFileFirefox(obj);
+		} else if (Sys.chrome) {
+			file_url = obj.value;
+		}
+
+		return file_url;
+	}
+
+	function changeImg(idx) {
+
+		app.$data.myTools[idx].src = "../images/" + $("#defColor" + idx).val() + ".jpg";
+	}
+
 	function sortViewItem() {
 		var arr = [];
 		$('.item').each(function() {
@@ -687,21 +728,7 @@
 		$("#showArea").is(':checked');
 		$("#showPhone").is(':checked');
 
-var formdata=new FormData();
-//通过append()方法在末尾追加key为name值为laoliu的数据
-formdata.append("name","laoliu");
 
- var xhr=new XMLHttpRequest();
-	xhr.open("post","http://127.0.0.1/adv");
-	xhr.open('POST', url, true);
-	xhr.setRequestHeader("Accept", "application/json");
-	xhr.send(formData); 
-    xhr.onload=function(){
-        if(xhr.status==200){
-            //...
-        }
-    }
-	
 	}
 	//再营销選擇
 	function cbVal(name) {
