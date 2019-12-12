@@ -309,7 +309,9 @@
 						}
 						idx++;
 					});
-					
+					if(this.dynamicTags.length == 0){
+						this.$data.dateRate =[];
+					}
 				},
 				vFocus(){
 					window.sIn = event.currentTarget;

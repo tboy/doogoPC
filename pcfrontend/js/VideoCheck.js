@@ -88,10 +88,10 @@ function addResult(name, result) {
 	var results = [];
 	var resultObj = x2js.xml_str2json(result);
 	results.unshift(resultObj);
-    console.log(JSON.stringify(resultObj));
+	console.log(JSON.stringify(resultObj));
 	var isPass = true;
 	var arrs = resultObj.File.track;
-	
+
 	//时长：6-15秒
 	var duration = arrs[0].Duration;
 	duration = parseInt(duration.substr(0, duration.indexOf("s")));
@@ -99,64 +99,90 @@ function addResult(name, result) {
 		isPass = false;
 	}
 
-    //视频编码：H.264/AVC
-    var videoFormat = arrs[1].Format;
-	if(videoFormat == "AVC" || videoFormat == "H.264") {
-		
-	}else{
+	//视频编码：H.264/AVC
+	var videoFormat = arrs[1].Format;
+	if (videoFormat == "AVC" || videoFormat == "H.264") {
+
+	} else {
 		isPass = false;
 	}
 	//格式类型：Main Profile
-
-	
-    //分辨率：640×360px
-    if(parseInt(arrs[1].Width) ==640 && parseInt(arrs[1].Height) ==360) {
-		
-	}else{
-		isPass = false;
-	}
-	
-	//采样纵横比：1:1
-
-
-    //文件大小：≤ 1.7MB
-	if(parseInt(arrs[0].File_size) > (1024*1.7)) {
+	if(arrs[1].Format_profile.indexOf("Main")==-1){
 		isPass = false;
 	}
 
-    //视频码率：≤ 800 kbit/s
-	if(parseInt(arrs[1].Bit_rate)>800){
+
+	//分辨率：640×360px
+	if (parseInt(arrs[1].Width) == 640 && parseInt(arrs[1].Height) == 360) {
+
+	} else {
 		isPass = false;
 	}
 
-    //帧率推荐： 24 fps
-	
-    //音频格式：AAC
-    if(arrs[2].Format != "AAC"){
-		isPass = false;
-	}
-    //音频格式类型：LC
-	if(arrs[2].Format_profile.indexOf("LC") ==-1){
+	//采样纵横比：1:1 采样宽高比(sample aspect ratio, SAR)
+
+
+	//文件大小：≤ 1.7MB
+	if (parseInt(arrs[0].File_size) > (1024 * 1.7)) {
 		isPass = false;
 	}
 
-    //音频码率：≤ 96 kbit/sec
-     if(parseInt(arrs[2].Bit_rate)>96){
-		 isPass = false;
-	 }
-    //音频采样率推荐：44.1 kHz
+	//视频码率：≤ 800 kbit/s
+	if (parseInt(arrs[1].Bit_rate) > 800) {
+		isPass = false;
+	}
 
-    //Scan type：progressive
+	//帧率推荐： 24 fps
 
-    //音画时差：< 0.5 秒
+	//音频格式：AAC
+	if (arrs[2].Format != "AAC") {
+		isPass = false;
+	}
+	//音频格式类型：LC
+	if (arrs[2].Format_profile.indexOf("LC") == -1) {
+		isPass = false;
+	}
 
-    //Standard：非PAL
+	//音频码率：≤ 96 kbit/sec
+	if (parseInt(arrs[2].Bit_rate) > 96) {
+		isPass = false;
+	}
+	//音频采样率推荐：44.1 kHz
 
-    if(!isPass){
+	//Scan type：progressive
+	if(arrs[1].Scan_type != 'Progressive'){
+		isPass = false;
+	}
+
+
+
+	if (!isPass) {
 		alert("视频格式不正确！");
 		app.$data.myTools[videoPos].src = '';
 		$("#videos").val(null);
 		$("#videos").val('');
+		return;
 	}
 
+	//uploadFile();
+
+}
+//上传文件
+function uploadFile() {
+	app.$data.myTools[videoPos].file
+	var fd = new FormData();
+	fd.append("file", app.$data.myTools[videoPos].file.context.files[0]);
+	fd.append("_crf_front",token);
+	var xhr = new XMLHttpRequest();
+	//自己填
+	xhr.open("POST", "上传路径", true);
+	xhr.send(fd);
+	xhr.onload = function(e) {
+		if (this.status == 200) {
+			//回传一个服务器的视频访问路径
+			//alert(this.responseText);
+			app.$data.myTools[videoPos].savePath = this.path;
+			console.log("上传完毕！")
+		}
+	};
 }
