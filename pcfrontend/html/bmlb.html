@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title></title>
+		<link rel="stylesheet" href="../css/bootstrap.css">
+		<link rel="stylesheet" href="../css/common.css">
+		<link rel="stylesheet" href="../css/iframe.css">
+		<link rel="stylesheet" href="../css/jquery.pagination.css">
+		<link rel="stylesheet" href="../css/jquery-ui.css">
+		<link rel="stylesheet" href="../css/reset.css">
+		<link rel="stylesheet" href="../css/style.css">
+		<link rel="stylesheet" href="../css/styles.css">
+		<link rel="stylesheet" href="../css/swiper.css">
+		<link rel="stylesheet" href="../css/myTaskCom.css">
+		<link rel="stylesheet" href="../css/myTask3.css">
+
+		<!-- 引入样式 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../css/element-ui/index.css">
+
+
+		<link rel="stylesheet" href="../js/page/easyhelper.min.css">
+		<link rel="stylesheet" href="../css/chosen.css">
+		<script src="../js/page/jquery-3.3.1.min.js"></script>
+		<script src="../css/element-ui/vue.js"></script>
+		<script src="../css/element-ui/index.js"></script>
+
+		<script src="../js/chosen.jquery.js"></script>
+		<script src="../js/echarts.min.js"></script>
+		<script src="../js/chartDemo.js"></script>
+
+		<script src="../js/page/jquery.transit.min.js"></script>
+		<script src="../js/page/es6-shim.min.js"></script>
+		<script src="../js/page/easyhelper.min.js"></script>
+		<script src="../js/page/jquery-3.3.1.min.js"></script>
+		<script src="../css/element-ui/vue.js"></script>
+
+		<!-- 引入组件库 -->
+		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+	</head>
+	<body>
+		<div class="myContent" id="cnt">
+			<div style="height: 55px; padding-top: 10px;">
+				<el-button @click="showAdd = true;selItem = {name:''};" class="btn2" type="primary" size="small">添加一级部门</el-button>
+			</div>
+			<el-table :data="tableData" :header-cell-style="{background:'#f1f1f1'}" style="width: 100%;margin-bottom: 20px;"
+			 row-key="id" default-expand-all :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+				<el-table-column prop="name" label="名称">
+				</el-table-column>
+				<el-table-column label="操作">
+					<template slot-scope="scope">
+						<el-button @click="showEdit = true; selItem = scope.row;" style="color:#007398;" type="text" size="small">编辑</el-button>
+						<el-button @click="showAdd = true; selItem = scope.row;" style="color:#007398;" type="text" size="small">添加</el-button>
+						<el-button @click="delItem(scope.row)" type="text" style="color:#007398;" size="small">删除</el-button>
+
+					</template>
+				</el-table-column>
+
+			</el-table>
+			<div id="page" style="margin:10px 0px;margin-bottom: 50px;"></div>
+			<el-dialog title="修改部门" :visible.sync="showEdit" width="30%" center>
+				<span>
+					<span>部门名称：</span>
+					<el-input style="margin-top: 10px;" v-model="selItem.name"></el-input>
+				</span>
+				<span slot="footer" class="dialog-footer">
+					<el-button class="btn3" @click="showEdit = false">取 消</el-button>
+					<el-button type="primary" class="btn2" @click="updateName">确 定</el-button>
+				</span>
+			</el-dialog>
+			<el-dialog title="添加部门" :visible.sync="showAdd" width="30%" center>
+				<span>
+					<span>部门名称：</span>
+					<el-input  style="margin-top: 10px;"  v-model="addName"></el-input>
+				</span>
+				<span slot="footer" class="dialog-footer">
+					<el-button class="btn3" @click="showAdd = false">取 消</el-button>
+					<el-button class="btn2" type="primary" @click="addItem">确 定</el-button>
+				</span>
+			</el-dialog>
+		</div>
+
+	</body>
+</html>
+<script>
+	var app;
+	$(function() {
+		initDateUI();
+		Helper.ui.page("#page", {
+			total: 30, //数据总量
+			pageSize: 8, //每页的数据量
+			currentPage: 1, //默认处于哪一页
+			showTotal: false, //是否在分页按钮左侧显示数据总量
+			showTo: false, //是否在分页按钮右侧显示直接跳转至某一页
+			change: function(i) {
+				console.log("第几页" + i);
+				//自己后台拉数据 app.$data.tbs
+				app.$data.currentPage = i;
+				app.queryData();
+			}
+		});
+	});
+
+	function initDateUI() {
+		var obj = {};
+		app = new Vue({
+			el: "#cnt",
+			data: function() {
+				obj.currentPage = 1;
+				obj.showEdit = false;
+				obj.showAdd = false;
+				obj.selItem = {};
+				obj.addName = '';
+				obj.tableData = [{
+					id: 1,
+					name: '财务部',
+				}, {
+					id: 2,
+					name: 'IT部门',
+					children: [{
+						id: 3,
+						name: '前端',
+					}, {
+						id: 4,
+						name: '后台',
+
+					}]
+				}];
+				return obj;
+			},
+
+			methods: {
+				updateName() {
+					//ajax更新
+					console.log(this.$data.selItem);
+
+
+					this.$data.showEdit = false;
+				},
+				addItem(item) {
+					//ajax更新,返回ID，构建对象
+					this.$data.addName;
+					//
+					this.$data.selItem; //有父节点
+
+					if (this.$data.selItem.id) {
+						var tempItem = {
+							id: Math.random(),
+							name: this.$data.addName
+						};
+
+
+						if (!this.$data.selItem.children) {
+							this.$data.selItem.children = [];
+						}
+						this.$data.selItem.children.push(tempItem)
+					} else {
+						var tempItem = {
+							id: Math.random(),
+							name: this.$data.addName
+						};
+						this.$data.tableData.push(tempItem)
+					}
+					this.$data.showAdd = false;
+					this.$data.addName = "";
+					this.$data.tableData.sort();
+
+
+
+				},
+				delItem(item) {
+					//ajax更新,
+					item;
+					arrDel(this.$data.tableData, item);
+					this.$data.tableData.sort();
+				},
+				queryData() {
+					//查数据
+				}
+			}
+		})
+
+	}
+
+	function arrDel(arr, item) {
+		arr.map((temp, idx) => {
+			if (temp.id == item.id) {
+				arr.splice(idx, 1);
+				return;
+			}
+			if (temp.children) {
+				arrDel(temp.children, item);
+			}
+		})
+	}
+</script>
+
+
+<style>
+	.el-dialog__title {
+		line-height: 24px;
+		font-size: 14px;
+		color: #666;
+		float: left;
+	}
+
+	.el-dialog__header {
+		height: 16px;
+		padding: 12px 20px 10px;
+	}
+
+	.el-dialog__body {
+		color: #666;
+		font-size: 14px;
+		word-break: break-all;
+		border-top: 1px solid #f1f1f1;
+	}
+
+	.btn1 {
+		color: #808080;
+		background: #f1f1f1;
+		font-size: 14px;
+		padding: 6px 16px;
+		margin-left: 14px;
+	}
+
+	.btn2 {
+		color: #fff;
+		background: #007398;
+		font-size: 14px;
+		padding: 6px 16px;
+		margin-left: 14px;
+		border: 0;
+	}
+
+	.btn3 {
+		border: 1px solid #ccc;
+		color: black;
+		padding: 6px 19px;
+	}
+
+	.btn3:hover {
+		border: 1px solid #ccc;
+
+	}
+
+	.btn2:hover {
+		background: #018fbd;
+	}
+
+	.el-table th>.cell {
+		display: inline-block;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		position: relative;
+		vertical-align: middle;
+		padding-left: 10px;
+		padding-right: 10px;
+		width: 100%;
+		font-weight: 100;
+		font-size: 14px;
+	}
+
+	.el-table .cell {
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: normal;
+		word-break: break-all;
+		line-height: 23px;
+		padding-right: 10px;
+		font-size: 14px;
+		color: #666;
+		font-weight: 100;
+	}
+
+	.el-table td,
+	.el-table th {
+		padding: 3px 0;
+		min-width: 0;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		text-overflow: ellipsis;
+		vertical-align: middle;
+		position: relative;
+		text-align: left;
+	}
+
+	.el-dialog__headerbtn {
+		top: 5px !important;
+	}
+
+	.helper-page-wrapper i.active {
+		color: #fff;
+		background: #007398;
+		cursor: default;
+	}
+</style>
