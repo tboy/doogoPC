@@ -42,12 +42,15 @@
 		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 	</head>
 	<body>
-		<div class="myContent" id="cnt">
+		<div class="myContent" id="cnt" v-cloak>
 			<div style="height: 55px; padding-top: 10px;">
 				<el-button @click="showAdd = true;selItem = {name:''};" class="btn2" type="primary" size="small">添加一级部门</el-button>
+				<el-button @click="delHandle" class="btn2" type="primary" size="small">删除</el-button>
 			</div>
 			<el-table :data="tableData" :header-cell-style="{background:'#f1f1f1'}" style="width: 100%;margin-bottom: 20px;"
-			 row-key="id" default-expand-all :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+			 row-key="id" default-expand-all :tree-props="{children: 'children', hasChildren: 'hasChildren'}" @selection-change="handleSelectionChange">
+				<el-table-column type="selection" width="55">
+				</el-table-column>
 				<el-table-column prop="name" label="名称">
 				</el-table-column>
 				<el-table-column label="操作">
@@ -74,11 +77,20 @@
 			<el-dialog title="添加部门" :visible.sync="showAdd" width="30%" center>
 				<span>
 					<span>部门名称：</span>
-					<el-input  style="margin-top: 10px;"  v-model="addName"></el-input>
+					<el-input style="margin-top: 10px;" v-model="addName"></el-input>
 				</span>
 				<span slot="footer" class="dialog-footer">
 					<el-button class="btn3" @click="showAdd = false">取 消</el-button>
 					<el-button class="btn2" type="primary" @click="addItem">确 定</el-button>
+				</span>
+			</el-dialog>
+			<el-dialog title="删除" :visible.sync="showDel" width="30%" center>
+				<span>
+					<span style="display: block;text-align:center;">是否确定删除</span>
+				</span>
+				<span slot="footer" class="dialog-footer">
+					<el-button class="btn3" @click="showDel = false;" type="text" size="small">取消</el-button>
+					<el-button @click="delUsers" type="text" class="btn2" size="small">确定</el-button>
 				</span>
 			</el-dialog>
 		</div>
@@ -110,9 +122,11 @@
 			el: "#cnt",
 			data: function() {
 				obj.currentPage = 1;
+				obj.showDel = false;
 				obj.showEdit = false;
 				obj.showAdd = false;
 				obj.selItem = {};
+				obj.sels = [];
 				obj.addName = '';
 				obj.tableData = [{
 					id: 1,
@@ -133,8 +147,36 @@
 			},
 
 			methods: {
+				handleSelectionChange(val) {
+					this.$data.sels = val;
+				},
+				delHandle() {
+					this.$data.sels.length > 0 ? this.$data.showDel = true : alert('请勾选用户');
+				},
+				delUsers() {
+					//this.$data.selItem;
+					this.$data.sels.map(item2 => {
+						this.$data.tableData.map((item, idx) => {
+
+							if (item.id == item2.id) {
+								this.$data.tableData.splice(idx, 1);
+							}
+						})
+					})
+					this.$data.sels = null;
+					this.$data.showDel = false;
+				},
 				updateName() {
 					//ajax更新
+					if (this.$data.selItem.name == '') {
+						alert("请输入名称");
+						return;
+					}
+					if (this.$data.selItem.name.length > 12) {
+						alert("长度不能超过12个字");
+						this.$data.selItem.name.length = this.$data.selItem.name.length.substr(0, 12);
+						return;
+					}
 					console.log(this.$data.selItem);
 
 
@@ -143,6 +185,15 @@
 				addItem(item) {
 					//ajax更新,返回ID，构建对象
 					this.$data.addName;
+					if (this.$data.addName == '') {
+						alert("请输入名称");
+						return;
+					}
+					if (this.$data.addName.length > 12) {
+						alert("长度不能超过12个字");
+						this.$data.addName = this.$data.addName.substr(0, 12);
+						return;
+					}
 					//
 					this.$data.selItem; //有父节点
 
@@ -200,6 +251,10 @@
 
 
 <style>
+	[v-cloak] {
+		display: none;
+	}
+
 	.el-dialog__title {
 		line-height: 24px;
 		font-size: 14px;

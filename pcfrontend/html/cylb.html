@@ -41,8 +41,8 @@
 		<!-- 引入组件库 -->
 		<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 	</head>
-	<body>
-		<div class="myContent" id="cnt">
+	<body style="display:none;">
+		<div class="myContent" id="cnt" v-cloak>
 			<div style="height: 55px;padding-top: 10px;">
 				<el-button class="btn2" type="primary" size="small" style="margin-left:0;">添加成员</el-button>
 				<el-button @click="showXls = true;" class="btn2" type="primary" size="small">批量导入</el-button>
@@ -84,25 +84,26 @@
 
 			<div id="page" style="margin:10px 0px;margin-bottom: 50px;"></div>
 
-			<el-dialog title="批量导入" :visible.sync="showXls" width="500" center>
+			<el-dialog title="批量导入" :visible.sync="showXls" width="500px" center>
 				<span>
 					<span style="display: block; margin: auto;width: 74%;">请下载通讯录模版，按格式修改后导入
-						<el-button class='btn1' @click="downXls" type="text" style="float: right; margin-top: -10px;" size="small">下载模板</el-button>
+						<el-button class='btn1' @click="downXls" type="text" style="float: right; margin-top: -23px;" size="small">下载模板</el-button>
 					</span>
 					<p v-if="fileName == ''" style="display: block;margin: auto;width: 100%;height: 16px;margin-top: 37px;padding: 33px 0px;background: #f1f1f1;">
-						<span style="margin-left: 87px;">文件中成员将被导入至公司主体下</span>
-						<el-button class="btn2" @click="selXls" type="primary" size="small">上传文件</el-button>
+						<span style="margin-left: 59px;">文件中成员将被导入至公司主体下</span>
+						<el-button style="margin-left:28px;" class="btn2" @click="selXls" type="primary" size="small">上传文件</el-button>
 					</p>
 					<p v-if="fileName != ''" style="display: block;margin: auto;width: 100%;height: 16px;margin-top: 37px;padding: 33px 0px;background: #f1f1f1;">
-						<span style="margin-left: 87px;">{{fileName}}
+						<span style="margin-left: 59px;">{{fileName}}
 							<el-button @click="selXls" type="text" style="color: #007398;" size="small">重新上传</el-button>
 						</span>
-						<el-button class="btn2" @click="uploadXls" type="primary" size="small">导入</el-button>
+						<el-button class="btn2" @click="uploadXls" style="float: right;margin-right: 59px;width: 90px;" type="primary"
+						 size="small">导入</el-button>
 					</p>
 				</span>
 
 			</el-dialog>
-			<el-dialog title="微信邀请" :visible.sync="showWX" width="30%" center>
+			<el-dialog title="微信邀请" :visible.sync="showWX" width="310px" center>
 				<span>
 					<span style="display: block;text-align:center;">分享二维码通知加入</span>
 					<img src="../images/wx.png" />
@@ -135,19 +136,23 @@
 	var app;
 	$(function() {
 		initDateUI();
-		Helper.ui.page("#page", {
-			total: 30, //数据总量
-			pageSize: 8, //每页的数据量
-			currentPage: 1, //默认处于哪一页
-			showTotal: false, //是否在分页按钮左侧显示数据总量
-			showTo: false, //是否在分页按钮右侧显示直接跳转至某一页
-			change: function(i) {
-				console.log("第几页" + i);
-				//自己后台拉数据 app.$data.tbs
-				app.$data.currentPage = i;
-				app.queryData();
-			}
-		});
+		setTimeout(function(){
+			document.body.style.display='block';
+			Helper.ui.page("#page", {
+				total: 30, //数据总量
+				pageSize: 8, //每页的数据量
+				currentPage: 1, //默认处于哪一页
+				showTotal: false, //是否在分页按钮左侧显示数据总量
+				showTo: false, //是否在分页按钮右侧显示直接跳转至某一页
+				change: function(i) {
+					console.log("第几页" + i);
+					//自己后台拉数据 app.$data.tbs
+					app.$data.currentPage = i;
+					app.queryData();
+				}
+			});
+		},200);
+		
 	});
 
 	function initDateUI() {
@@ -279,6 +284,10 @@
 	}
 </script>
 <style>
+	[v-cloak] {
+		display: none;
+	}
+
 	.el-dialog__title {
 		line-height: 24px;
 		font-size: 14px;
