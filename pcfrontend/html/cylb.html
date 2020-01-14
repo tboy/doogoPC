@@ -46,7 +46,7 @@
 			<div style="height: 55px;padding-top: 10px;">
 				<el-button class="btn2" type="primary" size="small" style="margin-left:0;">添加成员</el-button>
 				<el-button @click="showXls = true;" class="btn2" type="primary" size="small">批量导入</el-button>
-				<el-button @click="showAdd = true;" class="btn2" type="primary" size="small">设置所在部门</el-button>
+				<el-button @click="setDept" class="btn2" type="primary" size="small">设置所在部门</el-button>
 				<el-button @click="delHandle" class="btn2" type="primary" size="small">删除</el-button>
 				<el-button @click="showWX = true;" class="btn2" type="primary" style="background: #ff7326;" size="small">微信邀请加入</el-button>
 			</div>
@@ -126,6 +126,34 @@
 				</span>
 			</el-dialog>
 
+
+			<el-dialog title="添加部门" :visible.sync="isShow" width="600px" height="500px" center>
+				<div style="height:250px;">
+					<div style="width:50%;float:left;">
+						<el-input placeholder="输入关键字进行过滤" v-model="filterText">
+						</el-input>
+						<el-tree show-checkbox @check="updateList" class="filter-tree" :data="data" node-key="id" default-expand-all
+						 :filter-node-method="filterNode" ref="tree">
+						</el-tree>
+					</div>
+					<div style="height: 250px;width: 45%;padding-left: 10px;float: left;border-left: 1px solid rgb(241, 241, 241);margin-left: 15px;">
+						<div>成员将属于一下部门</div>
+						<div>
+							<template v-for="item in deptList">
+								<div style="width:100%;height:20px;margin-top:10px;margin-bottom: 10px;;">
+									<div style="float:left;">{{item.label}}</div>
+									<div style="float:right;color:#007398;cursor:pointer;" @click="delDept(item)">删除</div>
+								</div>
+							</template>
+						</div>
+					</div>
+				</div>
+				<span slot="footer" class="dialog-footer">
+					<el-button class="btn3" @click="isShow = false;" type="text" size="small">取消</el-button>
+					<el-button @click="updateDept" type="text" class="btn2" size="small">确定</el-button>
+				</span>
+			</el-dialog>
+
 		</div>
 		<textarea style="display:none;" cols="20" rows="10" id="biao1">www.baidu.com</textarea>
 
@@ -136,8 +164,8 @@
 	var app;
 	$(function() {
 		initDateUI();
-		setTimeout(function(){
-			document.body.style.display='block';
+		setTimeout(function() {
+			document.body.style.display = 'block';
 			Helper.ui.page("#page", {
 				total: 30, //数据总量
 				pageSize: 8, //每页的数据量
@@ -151,119 +179,202 @@
 					app.queryData();
 				}
 			});
-		},200);
-		
+		}, 200);
+
 	});
 
 	function initDateUI() {
 		var obj = {};
 		app = new Vue({
-			el: "#cnt",
-			data: function() {
-				obj.currentPage = 1;
-				obj.showXls = false;
-				obj.showWX = false;
-				obj.showDel = false;
-				obj.isCopy = false;
-				obj.selItem = [];
-				obj.fileName = '';
-				obj.tableData = [{
-						id: 1,
-						name: '小灿',
-						phone: '123213123342',
-						depts: [{
+				el: "#cnt",
+				data: function() {
+					obj.currentPage = 1;
+					obj.showXls = false;
+					obj.showWX = false;
+					obj.showDel = false;
+					obj.isCopy = false;
+					obj.isShow = false;
+					obj.selItem = [];
+					obj.fileName = '';
+					obj.tableData = [{
 							id: 1,
-							name: '东区门店'
+							name: '小灿',
+							phone: '123213123342',
+							depts: [{
+								id: 1,
+								name: '东区门店'
+							}, {
+								id: 2,
+								name: '西区门店'
+							}],
+							position: '皇帝',
+							email: "ggg@qq.com"
+						},
+						{
+							id: 2,
+							name: '二狗',
+							phone: '123213123342',
+							depts: [{
+								id: 2,
+								name: '西区门店'
+							}],
+							position: '皇帝',
+							email: "ggg@qq.com"
+						}
+					];
+					obj.filterText = '',
+						obj.deptList = [],
+						obj.data = [{
+							id: 1,
+							label: '东区门店',
+							children: [{
+								id: 4,
+								label: '子部门',
+								children: [{
+									id: 9,
+									label: '子部门11'
+								}, {
+									id: 10,
+									label: '子部门12'
+								}]
+							}]
 						}, {
 							id: 2,
-							name: '西区门店'
-						}],
-						position: '皇帝',
-						email: "ggg@qq.com"
-					},
-					{
-						id: 2,
-						name: '二狗',
-						phone: '123213123342',
-						depts: [{
-							id: 2,
-							name: '西区门店'
-						}],
-						position: '皇帝',
-						email: "ggg@qq.com"
+							label: '西区门店',
+						}]
+					return obj;
+				},
+				watch: {
+					filterText(val) {
+						this.$refs.tree.filter(val);
 					}
-				];
-				return obj;
-			},
-
-			methods: {
-				handleSelectionChange(val) {
-					this.$data.selItem = val;
 				},
-				delHandle() {
-					this.$data.selItem.length > 0 ? this.$data.showDel = true : alert('请勾选用户');
-				},
-				delUsers() {
-					//this.$data.selItem;
-					this.$data.selItem.map(item2 => {
-						this.$data.tableData.map((item, idx) => {
+				methods: {
 
-							if (item.id == item2.id) {
-								this.$data.tableData.splice(idx, 1);
+
+					handleSelectionChange(val) {
+						this.$data.selItem = val;
+					},
+					delHandle() {
+						this.$data.selItem.length > 0 ? this.$data.showDel = true : alert('请勾选用户');
+					},
+					delUsers() {
+						//this.$data.selItem;
+						this.$data.selItem.map(item2 => {
+							this.$data.tableData.map((item, idx) => {
+
+								if (item.id == item2.id) {
+									this.$data.tableData.splice(idx, 1);
+								}
+							})
+						})
+						this.$data.selItem = null;
+						this.$data.showDel = false;
+					},
+					copy() {
+						var Url2 = document.getElementById("biao1");
+						Url2.select(); // 选择对象
+						document.execCommand("Copy"); // 执行浏览器复制命令
+						this.$data.isCopy = true;
+					},
+					selXls() {
+						$("#xls").trigger("click");
+					},
+					downXls() {
+						window.open("http://www.baidu.com", "_blank");
+					},
+					uploadXls() {
+						let that = this;
+						var formData = new FormData();
+						var name = $("#xls").val();
+						formData.append('file', $("#xls")[0].files[0]);
+						// 此处可传入多个参数
+						formData.append('name', name);
+						$.ajax({
+							url: '/collar/import',
+							type: 'post',
+							async: false,
+							data: formData,
+							processData: false, // 告诉jQuery不要去处理发送的数据
+							contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+							beforeSend: function() { //过程...
+								console.log('正在进行，请稍候')
+							},
+							success: function(res) {
+								alert("导入成功");
+								that.$data.showXls = false;
+							},
+							error: function() {
+								alert("导入失败");
+								that.$data.showXls = false;
+								//console.log('导入失败')
 							}
 						})
-					})
-					this.$data.selItem = null;
-					this.$data.showDel = false;
-				},
-				copy() {
-					var Url2 = document.getElementById("biao1");
-					Url2.select(); // 选择对象
-					document.execCommand("Copy"); // 执行浏览器复制命令
-					this.$data.isCopy = true;
-				},
-				selXls() {
-					$("#xls").trigger("click");
-				},
-				downXls() {
-					window.open("http://www.baidu.com", "_blank");
-				},
-				uploadXls() {
-					let that = this;
-					var formData = new FormData();
-					var name = $("#xls").val();
-					formData.append('file', $("#xls")[0].files[0]);
-					// 此处可传入多个参数
-					formData.append('name', name);
-					$.ajax({
-						url: '/collar/import',
-						type: 'post',
-						async: false,
-						data: formData,
-						processData: false, // 告诉jQuery不要去处理发送的数据
-						contentType: false, // 告诉jQuery不要去设置Content-Type请求头
-						beforeSend: function() { //过程...
-							console.log('正在进行，请稍候')
-						},
-						success: function(res) {
-							alert("导入成功");
-							that.$data.showXls = false;
-						},
-						error: function() {
-							alert("导入失败");
-							that.$data.showXls = false;
-							//console.log('导入失败')
+
+					},
+					queryData() {
+
+					},
+					filterNode(value, data) {
+						if (!value) return true;
+						return data.label.indexOf(value) !== -1;
+					},
+					updateList() {
+						this.$data.deptList = this.$refs.tree.getCheckedNodes();
+						if (this.$data.deptList) {
+							this.$data.deptList.sort();
 						}
-					})
+					},
+					delDept(item) {
 
-				},
-				queryData() {
+						var idx = null
+						var arr = [];
+						for (var i = 0; i < this.$data.deptList.length; i++) {
+							if (item.id == this.$data.deptList[i].id) {
+								idx = i;
+							} else {
+								arr.push(this.$data.deptList[i]);
+							}
+						}
+						this.$data.deptList.splice(idx, 1);
 
+						this.$refs.tree.setCheckedNodes(arr);
+						this.$data.deptList.sort();
+					},
+				    setDept() {
+						if(this.$data.selItem.length == 1 ){
+							this.$data.isShow = true;
+							var arr = [];
+							this.$data.deptList = [];
+							this.$data.selItem[0].depts.map((item)=>{
+								arr.push(item.id);
+								let obj = {id:item.id,label:item.name};
+								this.$data.deptList.push(obj);
+							})
+							this.$data.deptList.sort();
+							let that= this;
+							setTimeout(function(){
+								that.$refs.tree.setCheckedKeys(arr);
+							},200);
+							
+						}else{
+							alert("请选中一个用户设置");
+						}
+					},
+				    updateDept(){
+						this.$data.isShow = false;
+						
+						this.$data.selItem[0].depts = this.$data.deptList.map((item) =>{
+							item.name = item.label;
+							return item;
+						})
+						this.$data.tableData.sort();
+					}
 				}
-			}
-		})
+			})
+		}
 
-	}
+	
 
 	function arrDel(arr, item) {
 		arr.map((temp, idx) => {
