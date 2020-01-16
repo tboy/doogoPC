@@ -84,15 +84,7 @@
 					<el-button class="btn2" type="primary" @click="addItem">确 定</el-button>
 				</span>
 			</el-dialog>
-			<el-dialog title="删除" :visible.sync="showDel" width="30%" center>
-				<span>
-					<span style="display: block;text-align:center;">是否确定删除</span>
-				</span>
-				<span slot="footer" class="dialog-footer">
-					<el-button class="btn3" @click="showDel = false;" type="text" size="small">取消</el-button>
-					<el-button @click="delUsers" type="text" class="btn2" size="small">确定</el-button>
-				</span>
-			</el-dialog>
+			
 		</div>
 
 	</body>
@@ -122,7 +114,7 @@
 			el: "#cnt",
 			data: function() {
 				obj.currentPage = 1;
-				obj.showDel = false;
+				
 				obj.showEdit = false;
 				obj.showAdd = false;
 				obj.selItem = {};
@@ -151,7 +143,21 @@
 					this.$data.sels = val;
 				},
 				delHandle() {
-					this.$data.sels.length > 0 ? this.$data.showDel = true : alert('请勾选用户');
+					if(this.$data.sels.length > 0){
+						this.$confirm('是否确定删除?', '提示', {
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+							type: 'warning'
+						}).then(() => {
+							//ajax更新,
+							this.delUsers();
+						}).catch(() => {
+							
+						});
+					}else{
+						this.$alert('请勾选用户', '提示', {type: 'warning'});
+					}
+					
 				},
 				delUsers() {
 					//this.$data.selItem;
@@ -164,33 +170,37 @@
 						})
 					})
 					this.$data.sels = null;
-					this.$data.showDel = false;
+					
 				},
 				updateName() {
 					//ajax更新
 					if (this.$data.selItem.name == '') {
-						alert("请输入名称");
+						this.$alert('请输入名称', '提示', {type: 'warning'})
 						return;
 					}
 					if (this.$data.selItem.name.length > 12) {
-						alert("长度不能超过12个字");
+						this.$alert('长度不能超过12个字', '提示', {type: 'warning'})
 						this.$data.selItem.name.length = this.$data.selItem.name.length.substr(0, 12);
 						return;
 					}
 					console.log(this.$data.selItem);
-
-
+					let tempName = this.$data.tableData[0].name;
+					this.$data.tableData[0].name = '';
+					this.$data.tableData[0].name = tempName;
 					this.$data.showEdit = false;
 				},
 				addItem(item) {
 					//ajax更新,返回ID，构建对象
 					this.$data.addName;
 					if (this.$data.addName == '') {
-						alert("请输入名称");
+						
+						this.$alert('请输入名称', '提示', {type: 'warning'})
+					
 						return;
 					}
 					if (this.$data.addName.length > 12) {
-						alert("长度不能超过12个字");
+						this.$alert('长度不能超过12个字', '提示', {type: 'warning'})
+					
 						this.$data.addName = this.$data.addName.substr(0, 12);
 						return;
 					}
@@ -223,10 +233,20 @@
 
 				},
 				delItem(item) {
-					//ajax更新,
-					item;
-					arrDel(this.$data.tableData, item);
-					this.$data.tableData.sort();
+					
+					this.$confirm('是否确定删除?', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
+						//ajax更新,
+						item;
+						arrDel(this.$data.tableData, item);
+						this.$data.tableData.sort();
+					}).catch(() => {
+						
+					});
+					
 				},
 				queryData() {
 					//查数据

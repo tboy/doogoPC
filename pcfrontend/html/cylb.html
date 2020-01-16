@@ -109,6 +109,7 @@
 					<img src="../images/wx.png" />
 					<el-button @click="copy" type="text" size="small" style="margin: auto; display: block;">复制邀请链接</el-button>
 					<el-button v-if="isCopy" type="text" size="small" style="margin: auto; display: block;background:#38b52e;color:white;padding: 2px 2px;border-radius: 0;">复制成功</el-button>
+				    <textarea style="opacity:0;height:0,width:0;position: absolute;top:-100px;" cols="1" rows="1" id="biao1">www.baidu.com</textarea>
 				</span>
 				<span slot="footer" class="dialog-footer">
 					<el-button @click="showWX = false">关 闭</el-button>
@@ -132,7 +133,7 @@
 					<div style="width:50%;float:left;">
 						<el-input placeholder="输入关键字进行过滤" v-model="filterText">
 						</el-input>
-						<el-tree show-checkbox @check="updateList" class="filter-tree" :data="data" node-key="id" default-expand-all
+						<el-tree :render-content="renderItem" @check="updateList" class="filter-tree" :data="data" default-expand-all
 						 :filter-node-method="filterNode" ref="tree">
 						</el-tree>
 					</div>
@@ -155,7 +156,7 @@
 			</el-dialog>
 
 		</div>
-		<textarea style="display:none;" cols="20" rows="10" id="biao1">www.baidu.com</textarea>
+		
 
 		<input style="display:none;" id="xls" onchange="getFileName();" type="file" accept=".xls" />
 	</body>
@@ -186,195 +187,260 @@
 	function initDateUI() {
 		var obj = {};
 		app = new Vue({
-				el: "#cnt",
-				data: function() {
-					obj.currentPage = 1;
-					obj.showXls = false;
-					obj.showWX = false;
-					obj.showDel = false;
-					obj.isCopy = false;
-					obj.isShow = false;
-					obj.selItem = [];
-					obj.fileName = '';
-					obj.tableData = [{
+			el: "#cnt",
+			data: function() {
+				obj.currentPage = 1;
+				obj.showXls = false;
+				obj.showWX = false;
+				obj.showDel = false;
+				obj.isCopy = false;
+				obj.isShow = false;
+				obj.selItem = [];
+				obj.fileName = '';
+				obj.tableData = [{
+						id: 1,
+						name: '小灿',
+						phone: '123213123342',
+						depts: [{
 							id: 1,
-							name: '小灿',
-							phone: '123213123342',
-							depts: [{
-								id: 1,
-								name: '东区门店'
-							}, {
-								id: 2,
-								name: '西区门店'
-							}],
-							position: '皇帝',
-							email: "ggg@qq.com"
-						},
-						{
-							id: 2,
-							name: '二狗',
-							phone: '123213123342',
-							depts: [{
-								id: 2,
-								name: '西区门店'
-							}],
-							position: '皇帝',
-							email: "ggg@qq.com"
-						}
-					];
-					obj.filterText = '',
-						obj.deptList = [],
-						obj.data = [{
-							id: 1,
-							label: '东区门店',
-							children: [{
-								id: 4,
-								label: '子部门',
-								children: [{
-									id: 9,
-									label: '子部门11'
-								}, {
-									id: 10,
-									label: '子部门12'
-								}]
-							}]
+							name: '东区门店'
 						}, {
 							id: 2,
-							label: '西区门店',
+							name: '西区门店'
+						}],
+						position: '皇帝',
+						email: "ggg@qq.com"
+					},
+					{
+						id: 2,
+						name: '二狗',
+						phone: '123213123342',
+						depts: [{
+							id: 2,
+							name: '西区门店'
+						}],
+						position: '皇帝',
+						email: "ggg@qq.com"
+					}
+				];
+				obj.filterText = '',
+					obj.deptList = [],
+					obj.data = [{
+						id: 1,
+						label: '东区门店',
+						checked: false,
+						children: [{
+							id: 4,
+							label: '子部门',
+							checked: false,
+							children: [{
+								id: 9,
+								label: '子部门11',
+								checked: false,
+							}, {
+								id: 10,
+								label: '子部门12',
+								checked: false,
+							}]
 						}]
-					return obj;
+					}, {
+						id: 2,
+						label: '西区门店',
+						checked: false,
+					}]
+				return obj;
+			},
+			watch: {
+				filterText(val) {
+					this.$refs.tree.filter(val);
+				}
+			},
+			methods: {
+
+				renderItem(h, option) {
+					let that = this;
+					// 用于格式化tree
+					//return '';
+					let isCheck = option.data.checked ? {
+						innerHTML: '<input type="checkbox" checked/>'
+					} : {
+						innerHTML: '<input type="checkbox" />'
+					}
+					return h('span', {}, [
+						h("span", {
+							class: 'leftSpan',
+							domProps: {
+								innerHTML: option.data.label
+							}
+						}),
+						h("span", {
+							class: 'rightSpan',
+							on: {
+								click: () => {
+									option.data.checked = !option.data.checked;
+									if(option.data.checked){
+										let obj = {id:option.data.id,label:option.data.label}
+										that.$data.deptList.push(obj);
+										that.$data.deptList.sort();
+									}else{
+										that.delDept(option.data);
+									}
+									
+								}
+							},
+							domProps: isCheck
+						})
+
+					])
 				},
-				watch: {
-					filterText(val) {
-						this.$refs.tree.filter(val);
+				handleSelectionChange(val) {
+					this.$data.selItem = val;
+				},
+				delHandle() {
+					this.$data.selItem.length > 0 ? this.$data.showDel = true : this.$alert('请勾选用户', '提示', {type: 'warning'});;
+				},
+				delUsers() {
+					//this.$data.selItem;
+					this.$data.selItem.map(item2 => {
+						this.$data.tableData.map((item, idx) => {
+
+							if (item.id == item2.id) {
+								this.$data.tableData.splice(idx, 1);
+							}
+						})
+					})
+					this.$data.selItem = null;
+					this.$data.showDel = false;
+				},
+				copy() {
+					var Url2 = document.getElementById("biao1");
+					Url2.select(); // 选择对象
+					document.execCommand("Copy"); // 执行浏览器复制命令
+					this.$data.isCopy = true;
+				},
+				selXls() {
+					$("#xls").trigger("click");
+				},
+				downXls() {
+					window.open("http://www.baidu.com", "_blank");
+				},
+				uploadXls() {
+					let that = this;
+					var formData = new FormData();
+					var name = $("#xls").val();
+					formData.append('file', $("#xls")[0].files[0]);
+					// 此处可传入多个参数
+					formData.append('name', name);
+					$.ajax({
+						url: '/collar/import',
+						type: 'post',
+						async: false,
+						data: formData,
+						processData: false, // 告诉jQuery不要去处理发送的数据
+						contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+						beforeSend: function() { //过程...
+							console.log('正在进行，请稍候')
+						},
+						success: function(res) {
+							that.$alert('导入成功', '提示', {type: 'warning'});
+							
+							that.$data.showXls = false;
+						},
+						error: function() {
+							that.$alert('导入失败', '提示', {type: 'warning'});
+							
+							that.$data.showXls = false;
+							//console.log('导入失败')
+						}
+					})
+
+				},
+				queryData() {
+
+				},
+				filterNode(value, data) {
+					if (!value) return true;
+					return data.label.indexOf(value) !== -1;
+				},
+				updateList() {
+					this.$data.deptList = this.$refs.tree.getCheckedNodes();
+					if (this.$data.deptList) {
+						this.$data.deptList.sort();
 					}
 				},
-				methods: {
+				delDept(item) {
+					var idx = null
+					 this.$data.deptList.map((item2,i)=>{
+						if (item.id == item2.id) {
+							idx = i;
+						} 
+					})
+					this.$data.deptList.splice(idx, 1);
+
+					this.unCheckTree(this.$data.data,item);
+					this.$data.data.sort();
+					this.$data.deptList.sort();
+				},
+				unCheckTree(arr,item){
+					let that = this;
+				  arr.map(item2=>{
+					  if(item2.id==item.id){
+						  item2.checked = false;
+					  }
+					  if(item2.children && item2.children.length>0){
+						   that.unCheckTree(item2.children,item)
+					  }
+					 
+				  });	
+				},
+				setDept() {
+					if (this.$data.selItem.length == 1) {
+						this.$data.isShow = true;
+						var arr = [];
+						this.$data.deptList = [];
+						this.$data.selItem[0].depts.map((item) => {
+							arr.push(item.id);
+							let obj = {
+								id: item.id,
+								label: item.name,
+								checked: true,
+							};
+							this.$data.deptList.push(obj);
+						})
+						this.$data.deptList.sort();
 
 
-					handleSelectionChange(val) {
-						this.$data.selItem = val;
-					},
-					delHandle() {
-						this.$data.selItem.length > 0 ? this.$data.showDel = true : alert('请勾选用户');
-					},
-					delUsers() {
-						//this.$data.selItem;
-						this.$data.selItem.map(item2 => {
-							this.$data.tableData.map((item, idx) => {
-
-								if (item.id == item2.id) {
-									this.$data.tableData.splice(idx, 1);
+						this.$data.data = this.$data.data.map(item => {
+							let isCheck = false;
+							this.$data.deptList.map(item2 => {
+								if (item2.id == item.id) {
+									isCheck = true;
 								}
 							})
-						})
-						this.$data.selItem = null;
-						this.$data.showDel = false;
-					},
-					copy() {
-						var Url2 = document.getElementById("biao1");
-						Url2.select(); // 选择对象
-						document.execCommand("Copy"); // 执行浏览器复制命令
-						this.$data.isCopy = true;
-					},
-					selXls() {
-						$("#xls").trigger("click");
-					},
-					downXls() {
-						window.open("http://www.baidu.com", "_blank");
-					},
-					uploadXls() {
-						let that = this;
-						var formData = new FormData();
-						var name = $("#xls").val();
-						formData.append('file', $("#xls")[0].files[0]);
-						// 此处可传入多个参数
-						formData.append('name', name);
-						$.ajax({
-							url: '/collar/import',
-							type: 'post',
-							async: false,
-							data: formData,
-							processData: false, // 告诉jQuery不要去处理发送的数据
-							contentType: false, // 告诉jQuery不要去设置Content-Type请求头
-							beforeSend: function() { //过程...
-								console.log('正在进行，请稍候')
-							},
-							success: function(res) {
-								alert("导入成功");
-								that.$data.showXls = false;
-							},
-							error: function() {
-								alert("导入失败");
-								that.$data.showXls = false;
-								//console.log('导入失败')
-							}
-						})
-
-					},
-					queryData() {
-
-					},
-					filterNode(value, data) {
-						if (!value) return true;
-						return data.label.indexOf(value) !== -1;
-					},
-					updateList() {
-						this.$data.deptList = this.$refs.tree.getCheckedNodes();
-						if (this.$data.deptList) {
-							this.$data.deptList.sort();
-						}
-					},
-					delDept(item) {
-
-						var idx = null
-						var arr = [];
-						for (var i = 0; i < this.$data.deptList.length; i++) {
-							if (item.id == this.$data.deptList[i].id) {
-								idx = i;
-							} else {
-								arr.push(this.$data.deptList[i]);
-							}
-						}
-						this.$data.deptList.splice(idx, 1);
-
-						this.$refs.tree.setCheckedNodes(arr);
-						this.$data.deptList.sort();
-					},
-				    setDept() {
-						if(this.$data.selItem.length == 1 ){
-							this.$data.isShow = true;
-							var arr = [];
-							this.$data.deptList = [];
-							this.$data.selItem[0].depts.map((item)=>{
-								arr.push(item.id);
-								let obj = {id:item.id,label:item.name};
-								this.$data.deptList.push(obj);
-							})
-							this.$data.deptList.sort();
-							let that= this;
-							setTimeout(function(){
-								that.$refs.tree.setCheckedKeys(arr);
-							},200);
-							
-						}else{
-							alert("请选中一个用户设置");
-						}
-					},
-				    updateDept(){
-						this.$data.isShow = false;
-						
-						this.$data.selItem[0].depts = this.$data.deptList.map((item) =>{
-							item.name = item.label;
+							item.checked = isCheck;
 							return item;
 						})
-						this.$data.tableData.sort();
-					}
-				}
-			})
-		}
+						this.$data.data.sort();
 
-	
+
+					} else {
+						this.$alert('请选中一个用户设置', '提示', {type: 'warning'});
+					}
+				},
+				updateDept() {
+					this.$data.isShow = false;
+
+					this.$data.selItem[0].depts = this.$data.deptList.map((item) => {
+						item.name = item.label;
+						return item;
+					})
+					this.$data.tableData.sort();
+				}
+			}
+		})
+	}
+
+
 
 	function arrDel(arr, item) {
 		arr.map((temp, idx) => {
@@ -405,7 +471,10 @@
 		color: #666;
 		float: left;
 	}
-
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    background-color: #007398;
+    border-color: #007398;
+}
 	.el-dialog__header {
 		height: 16px;
 		padding: 12px 20px 10px;
@@ -497,5 +566,38 @@
 		color: #fff;
 		background: #007398;
 		cursor: default;
+	}
+	input[type="checkbox"] {
+		
+		-webkit-appearance: none;
+		vertical-align: middle;
+		margin-top: 0;
+		background: #fff;
+		border: #E5E5E5 solid 1px;
+		border-radius: 0;
+		min-height: 12px;
+		min-width: 12px;
+		width: auto;
+		height: auto;
+	}
+	
+	input[type="checkbox"]:checked {
+		background: #007398;
+	}
+	
+	input[type=checkbox]:checked::after {
+		content: '';
+	
+		position: absolute;
+		background: transparent;
+		border: #fff solid 2px;
+		border-top: none;
+		border-right: none;
+		height: 6px;
+		width: 10px;
+		-moz-transform: rotate(-45deg);
+		-ms-transform: rotate(-45deg);
+		-webkit-transform: rotate(-45deg);
+		transform: rotate(-45deg);
 	}
 </style>
