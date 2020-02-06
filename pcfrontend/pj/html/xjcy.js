@@ -44,6 +44,10 @@ function initVue() {
 				}
 
 				$('#file').trigger('click');
+			},
+			save(val){
+				//val,保存 1
+				console.log(app.$data.form);
 			}
 
 		},

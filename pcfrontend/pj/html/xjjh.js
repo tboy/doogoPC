@@ -21,18 +21,18 @@ function initVue() {
 				app.$data.form.ljdz = app.$data.form.select;
 				app.$data.form.select = "";
 			},
-			delCity(idx){
-				app.$data.form.areas.splice(idx,1);
-				app.$data.form.areasID.splice(idx,1);
+			delCity(idx) {
+				app.$data.form.areas.splice(idx, 1);
+				app.$data.form.areasID.splice(idx, 1);
 				app.$data.form.areas.sort();
 				var temp = app.$data.form.dy;
-				app.$data.form.dy=''
-				setTimeout(()=>{
-					
-					app.$data.form.dy=temp;
-				},20);
-				
-				
+				app.$data.form.dy = ''
+				setTimeout(() => {
+
+					app.$data.form.dy = temp;
+				}, 20);
+
+
 			},
 			changeMb() {
 				if (app.$data.form.tfmb == '转化量') {
@@ -40,12 +40,12 @@ function initVue() {
 					app.$data.form.fkfs = '按展示付费(oCPM)';
 				}
 				if (app.$data.form.tfmb == '点击量') {
-					app.$data.form.cjfa="手动";
+					app.$data.form.cjfa = "手动";
 					app.$data.form.tffs = "标准投放(推荐)";
 					app.$data.form.fkfs = '按点击付费(CPC)';
 				}
 				if (app.$data.form.tfmb == '展示量') {
-					app.$data.form.cjfa="手动";
+					app.$data.form.cjfa = "手动";
 					app.$data.form.tffs = "标准投放(推荐)";
 					app.$data.form.fkfs = '按展示付费(CPM)';
 				}
@@ -92,6 +92,8 @@ function initVue() {
 						return false;
 					}
 				});
+				//val,保存 1，2
+				console.log(app.$data.form);
 			}
 
 		},

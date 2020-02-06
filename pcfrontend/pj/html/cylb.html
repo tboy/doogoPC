@@ -36,7 +36,7 @@
 			<el-table :data="list" style="width:100%;margin:10px 0;" header-row-class-name="myheader" header-cell-class-name="myheader">
 				<el-table-column label="开关" width="80">
 					<template slot-scope="scope">
-						<el-switch style="" v-model="scope.row.isOpen" active-color="#13ce66" inactive-color="#ff4949">
+						<el-switch style="" v-model="scope.row.isOpen" active-color="#007398" inactive-color="#ff4949">
 						</el-switch>
 					</template>
 				</el-table-column>
@@ -56,7 +56,7 @@
 							<img :src="scope.row.ggcy" style="display:block;float:left;width:80px;height:45px;padding:5px;" />
 						</el-tooltip>
 
-						
+
 
 						<div style="width:200px;float:left;margin-top:5px;">{{scope.row.ggcyDetail}}</div>
 					</template>
@@ -135,9 +135,126 @@
 	.myheader {
 		background-color: #efefef !important;
 	}
-	.tip2{
-		border:0 !important;
-		 box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.1);
-		
+
+	.tip2 {
+		border: 0 !important;
+		box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.1);
+
+	}
+
+	.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+
+	.el-checkbox-button.is-checked:first-child .el-checkbox-button__inner {
+		border-left-color: #007398;
+	}
+
+	.el-checkbox-button.is-checked .el-checkbox-button__inner {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+		-webkit-box-shadow: -1px 0 0 0 #007398;
+		box-shadow: -1px 0 0 0 #007398;
+	}
+
+	.el-link.el-link--primary {
+		color: #007398;
+	}
+
+	.el-button--primary {
+		color: #FFF;
+		background-color: #007398;
+		border-color: #007398;
+	}
+
+	.el-radio-button__inner:hover {
+		color: #007398;
+	}
+
+	.el-select-dropdown__item.selected {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-date-table td.current:not(.disabled) span {
+		color: #FFF;
+		background-color: #007398;
+	}
+
+	.el-date-table td.today span {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-button--primary:focus,
+	.el-button--primary:hover {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+
+	.el-button--primary.is-active,
+	.el-button--primary:active {
+		background: #007398;
+		border-color: #007398;
+		color: #FFF
+	}
+
+	.el-input__inner:focus {
+		border-color: #007398;
+	}
+
+	.el-cascader-node.in-active-path,
+	.el-cascader-node.is-active,
+	.el-cascader-node.is-selectable.in-checked-path {
+		color: #007398;
+		font-weight: 700;
+	}
+
+	.el-button--text:focus,
+	.el-button--text:hover,
+	.el-button--text {
+		color: #007398;
+		background: 0 0;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.el-checkbox__input.is-checked+.el-checkbox__label {
+		color: #007398;
+	}
+
+	.el-checkbox__input.is-checked .el-checkbox__inner,
+	.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+		background-color: #007398;
+		border-color: #007398;
+	}
+
+	.el-cascader .el-input .el-input__inner:focus,
+	.el-cascader .el-input.is-focus .el-input__inner {
+		border-color: #007398;
+	}
+
+	.el-pagination.is-background .el-pager li:not(.disabled).active {
+		background-color: #007398;
+		color: #FFF;
+	}
+
+	.el-tabs__item.is-active {
+		color: #007398;
+	}
+
+	.el-picker-panel__shortcut:hover {
+		color: #007398;
+	}
+
+	.el-date-table td.end-date span,
+	.el-date-table td.start-date span {
+		background-color: #007398;
 	}
 </style>
