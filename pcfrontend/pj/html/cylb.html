@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>创意列表</title>
+		<link href="../js/elementui/theme-chalk/index.css" rel="stylesheet" />
+		<link href="../css/page-forminfo.css" rel="stylesheet" />
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/elementui/vue.js"></script>
+		<script src="../js/elementui/index.js"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=LX2BZ-XEXC4-R4GUF-XF6QZ-PGDKO-OIBOD"></script>
+		<script src="../js/qqMapConfig-a.js"></script>
+		<script src="../js/city-picker/city-data.js"></script>
+		<script src="cylbData.js"></script>
+		<script src="cylb.js"></script>
+	</head>
+	<body style="opacity:0;">
+		<div class="myContent" id="ct">
+			<el-tabs type="card" v-model="activeName" @tab-click="handleClick">
+
+				<el-tab-pane label="计划" name="1">
+
+				</el-tab-pane>
+				<el-tab-pane label="创意" name="2">
+
+				</el-tab-pane>
+			</el-tabs>
+			<el-button type="primary" onclick="javascript:location.href='xjcy.html'">+新建创意</el-button>
+			<el-input style="width:300px;" placeholder="输入计划ID或者名称搜索" v-model="form.keyWord">
+				<template slot="append">
+					<el-button @click="query">搜索</el-button>
+				</template>
+			</el-input>
+
+
+			<el-table :data="list" style="width:100%;margin:10px 0;" header-row-class-name="myheader" header-cell-class-name="myheader">
+				<el-table-column label="开关" width="80">
+					<template slot-scope="scope">
+						<el-switch style="" v-model="scope.row.isOpen" active-color="#13ce66" inactive-color="#ff4949">
+						</el-switch>
+					</template>
+				</el-table-column>
+
+				<el-table-column label="ID" width="150">
+					<template slot-scope="scope">
+						<span>{{scope.row.id}}</span>
+					</template>
+				</el-table-column>
+
+				<el-table-column label="广告创意">
+					<template slot-scope="scope">
+
+						<el-tooltip effect='light' placement="right" popper-class='tip2'>
+							<div slot="content"><img :src="scope.row.ggcy" style="width:188px;height:124px;padding:5px;" />
+							</div>
+							<img :src="scope.row.ggcy" style="display:block;float:left;width:80px;height:45px;padding:5px;" />
+						</el-tooltip>
+
+						
+
+						<div style="width:200px;float:left;margin-top:5px;">{{scope.row.ggcyDetail}}</div>
+					</template>
+
+				</el-table-column>
+				<el-table-column label="操作" width="100">
+					<template slot-scope="scope">
+						<el-link type="primary" @click="goEdit(scope.row.id)">编辑</el-link>
+						<el-popover v-if="scope.row.yl!=null" trigger="hover" placement="top">
+							<div>
+								<div>计划预览</div>
+								<img style="width:100;height:100px;margin:10px;margin-left:50px;" :src="scope.row.yl" />
+								<div>使用广告位对应的APP扫码预览</div>
+							</div>
+							<el-link slot="reference" type="primary">预览</el-link>
+						</el-popover>
+						<el-popover v-if="scope.row.yl==null" trigger="hover" placement="top">
+							<div>
+								当前状态无法预览
+							</div>
+							<el-link slot="reference" type="primary">预览</el-link>
+						</el-popover>
+					</template>
+				</el-table-column>
+				<el-table-column label="广告创意状态" width="180">
+					<template slot-scope="scope">
+						<span style="margin-left: 10px">{{ scope.row.state }}</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="建议" width="50">
+					<template slot-scope="scope">
+						<el-popover v-if="scope.row.jy!=null" trigger="hover" placement="left">
+							<div>
+								<div>审核修改建议</div>
+								<div style="font-size:12px;margin-top:10px;">{{scope.row.jy}}</div>
+							</div>
+							<div slot="reference" class="name-wrapper">
+								<i style="color:red;" class="el-icon-warning-outline" @click="showRowJY()" style="cursor:pointer;"></i>
+							</div>
+						</el-popover>
+
+						<span v-if="scope.row.jy==null">--</span>
+					</template>
+				</el-table-column>
+
+			</el-table>
+
+			<el-pagination background layout="prev, pager, next" @current-change="query" :page-size="form.pageSize" :total="form.total"
+			 :current-page.sync="form.currentPage">
+			</el-pagination>
+
+			<el-dialog title="审核建议" :visible.sync="showJy" width="60%">
+				<el-table :data="jys" border style="width: 100%">
+					<el-table-column label="内容">
+						<template slot-scope="scope">
+							<span style="margin-left: 10px">{{ scope.row.title }}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="审核建议">
+						<template slot-scope="scope">
+							<span style="margin-left: 10px">{{ scope.row.subj }}</span>
+						</template>
+					</el-table-column>
+
+				</el-table>
+				<span slot="footer" class="dialog-footer">
+
+					<el-button type="primary" @click="showJy = false">确 定</el-button>
+				</span>
+			</el-dialog>
+		</div>
+	</body>
+</html>
+
+<style>
+	.myheader {
+		background-color: #efefef !important;
+	}
+	.tip2{
+		border:0 !important;
+		 box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.1);
+		
+	}
+</style>

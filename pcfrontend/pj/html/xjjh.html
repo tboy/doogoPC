@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>新建计划</title>
+		<link href="../js/elementui/theme-chalk/index.css" rel="stylesheet" />
+		<link href="../css/page-forminfo.css" rel="stylesheet" />
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/elementui/vue.js"></script>
+		<script src="../js/elementui/index.js"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=LX2BZ-XEXC4-R4GUF-XF6QZ-PGDKO-OIBOD"></script>
+		<script src="../js/qqMapConfig-a.js"></script>
+		<script src="../js/city-picker/city-data.js"></script>
+		<script src="xjjhData.js"></script>
+		<script src="xjjh.js"></script>
+	</head>
+	<body style="opacity:0;">
+		<div class="myContent" id="ct">
+			<div class="top_title">{{editOrAdd}}</div>
+			<el-form style="width:95%;margin:auto;" ref="form" :model="form" :rules="rules" label-position='left' label-width="120px">
+				<div class="titl">广告组</div>
+				<el-form-item label="广告组预算" prop="ggzys">
+					<el-radio-group v-model="form.ggzys">
+						<el-radio-button label="不限"></el-radio-button>
+						<el-radio-button label="指定预算"></el-radio-button>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item v-if="form.ggzys=='指定预算'" label="日预算" prop="rys">
+					<el-input style="width:150px;" placeholder="请输入日预算" type="number" v-model="form.rys"></el-input>
+				</el-form-item>
+				<el-form-item label="广告组名称" prop="ggzmc">
+					<el-input style="width:300px;" placeholder="请输入广告组名称" v-model="form.ggzmc"></el-input>
+				</el-form-item>
+				<el-form-item label="计划名称" prop="jhmc">
+					<el-input style="width:300px;" placeholder="请输入计划名称" v-model="form.jhmc"></el-input>
+				</el-form-item>
+				<div class="titl">投放目标</div>
+				<el-form-item label="投放目标" prop="tfmb">
+					<el-radio-group v-model="form.tfmb" @change="changeMb">
+						<el-radio-button label="转化量"></el-radio-button>
+						<el-radio-button label="点击量"></el-radio-button>
+						<el-radio-button label="展示量"></el-radio-button>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="转化组件" prop="zhzj">
+					<el-radio-group v-model="form.zhzj">
+						<el-radio-button label="仅落地页" ></el-radio-button>
+					</el-radio-group>
+				</el-form-item>
+
+				<el-form-item label="链接地址" prop="ljdz">
+					<el-input style="width:390px;" placeholder="请输入网址或从之前网站选择" v-model="form.ljdz" class="input-with-select">
+						<el-select v-model="form.select" slot="append" @change="setUrl" placeholder="选择已有">
+							<el-option label="聚客通" value="https://www.chengzijianzhan.com/tetris/page/6763933303297802247"></el-option>
+						</el-select>
+					</el-input>
+					<el-link type="primary">快速创建新网站<i class="el-icon-position"></i></el-link>
+				</el-form-item>
+				·<div class="titl">用户定向</div>
+				<el-form-item label="地域" prop="dy">
+					<el-radio-group v-model="form.dy">
+						<el-radio-button label="不限"></el-radio-button>
+						<el-radio-button label="按省市"></el-radio-button>
+						<el-radio-button label="按商圈"></el-radio-button>
+					</el-radio-group>
+					<template v-if="form.dy=='按省市'">
+						<div style="margin-top:10px;">
+							<el-cascader-panel v-model="form.areasID" style="margin-right:10px;width:380px;float:left;" ref="areaSel" @change="getSelArea" :props="{ multiple: true}"
+							 :filterable="true" :options="form.area">
+							</el-cascader-panel>
+
+							<el-card class="box-card">
+								<div slot="header" class="clearfix" style="padding:5px;">
+									<span>已选</span>
+									<el-button style="float: right;" type="text" onClick="javascript:app.$refs.areaSel.clearCheckedNodes()">清空</el-button>
+								</div>
+								<el-tag style="width:100%;" v-for="(tag,idx) in form.areas" :key="tag.label"
+								  @close="delCity(idx)"
+								 closable type="info">
+									{{tag.label}}
+								</el-tag>
+
+							</el-card>
+						</div>
+					</template>
+					<template v-if="form.dy=='按商圈'">
+						<div style="width:500px;">
+							<select-map :data="form.zone" @change="changeToFormValue"></select-map>
+						</div>
+					</template>
+				</el-form-item>
+				<el-form-item label="性别" prop="xb">
+					<el-radio-group v-model="form.xb">
+						<el-radio-button label="不限"></el-radio-button>
+						<el-radio-button label="男"></el-radio-button>
+						<el-radio-button label="女"></el-radio-button>
+					</el-radio-group>
+				</el-form-item>
+
+				<el-form-item label="年龄" prop="nl">
+					<el-checkbox-group v-model="form.nl" @change="muilSel('nl')">
+						<el-checkbox-button class="noAng" label="不限"></el-checkbox-button>
+						<el-checkbox-button label="18-23"></el-checkbox-button>
+						<el-checkbox-button label="24-30"></el-checkbox-button>
+						<el-checkbox-button label="31-40"></el-checkbox-button>
+						<el-checkbox-button label="41-49"></el-checkbox-button>
+						<el-checkbox-button label="50+"></el-checkbox-button>
+					</el-checkbox-group>
+				</el-form-item>
+				<el-form-item label="平台" prop="pt">
+					<el-checkbox-group v-model="form.pt" @change="muilSel('pt')">
+						<el-checkbox-button class="noAng" label="不限"></el-checkbox-button>
+						<el-checkbox-button label="IOS"></el-checkbox-button>
+						<el-checkbox-button label="Android"></el-checkbox-button>
+						<el-checkbox-button label="PC"></el-checkbox-button>
+					</el-checkbox-group>
+				</el-form-item>
+				<div class="titl">预算与出价</div>
+				<template v-if="form.tfmb =='转化量'">
+					<el-form-item label="出价方案" prop="cjfa">
+						<el-radio-group v-model="form.cjfa">
+							<el-radio-button label="手动"></el-radio-button>
+							<el-radio-button label="自动"></el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="投放方式" prop="tffs">
+						<el-radio-group v-model="form.tffs">
+							<el-radio-button label="优先跑量"></el-radio-button>
+							<el-radio-button label="均衡投放"></el-radio-button>
+							<el-radio-button label="优先低成本"></el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="预算" prop="ys">
+						<el-input style="width:300px;" placeholder="请输入内容" v-model="form.ys" class="input-with-select">
+							<el-select v-model="form.ysType" slot="prepend" placeholder="请选择">
+								<el-option label="日预算" value="1"></el-option>
+								<el-option label="总预算" value="2"></el-option>
+							</el-select>
+							<span slot="append">元</span>
+						</el-input>
+					</el-form-item>
+
+					<el-form-item label="投放时间" prop="tfsj">
+						<el-date-picker v-model="form.time1" type="date" placeholder="选择日期"></el-date-picker>
+						-
+						<el-date-picker v-model="form.time2" type="date" placeholder="选择日期"></el-date-picker>
+					</el-form-item>
+					<el-form-item label="投放时段" prop="tfsd">
+						<el-radio-group v-model="form.tfsd">
+							<el-radio-button label="不限"></el-radio-button>
+							<el-radio-button label="指定时间段"></el-radio-button>
+						</el-radio-group>
+						<table v-if="form.tfsd=='指定时间段'" style="width:100%;margin-top:10px;">
+							<tr>
+								<td style="width:80px;">星期一</td>
+								<td>
+									<template v-for="(item,idx) in form.sd[0]">
+									<el-select class="sl1" v-model="item[0]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									至
+									<el-select class="sl1" v-model="item[1]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									
+									<el-link v-if="idx>0" type="primary" @click="del(0,idx)">删除</el-link>
+									&nbsp;
+									</template>
+									<el-link v-if="form.sd[0].length<3" type="primary" @click="add(0)">+新增时段</el-link>
+								</td>
+							</tr>
+							<tr>
+								<td>星期二</td>
+								<td>
+									<template v-for="(item,idx) in form.sd[1]">
+									<el-select  v-model="item[0]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									至
+									<el-select  v-model="item[1]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									<el-link v-if="idx>0" type="primary" @click="del(1,idx)">删除</el-link>
+									&nbsp;
+									
+									</template>
+									<el-link v-if="form.sd[1].length<3" type="primary" @click="add(1)">+新增时段</el-link>
+								</td>
+							</tr>
+							<tr>
+								<td>星期三</td>
+								<td>
+									<template v-for="(item,idx) in form.sd[2]">
+									<el-select  v-model="item[0]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									至
+									<el-select  v-model="item[1]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									<el-link v-if="idx>0" type="primary" @click="del(2,idx)">删除</el-link>
+									&nbsp;
+									</template>
+									<el-link v-if="form.sd[2].length<3" type="primary" @click="add(2)">+新增时段</el-link>
+								</td>
+							</tr>
+							<tr>
+								<td>星期四</td>
+								<td>
+									<template v-for="(item,idx) in form.sd[3]">
+									<el-select  v-model="item[0]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									至
+									<el-select  v-model="item[1]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									<el-link v-if="idx>0" type="primary" @click="del(3,idx)">删除</el-link>
+									&nbsp;
+									</template>
+									<el-link v-if="form.sd[3].length<3" type="primary" @click="add(3)">+新增时段</el-link>
+								</td>
+							</tr>
+							<tr>
+								<td>星期五</td>
+								<td>
+									<template v-for="(item,idx) in form.sd[4]">
+									<el-select  v-model="item[0]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									至
+									<el-select  v-model="item[1]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									<el-link v-if="idx>0" type="primary" @click="del(4,idx)">删除</el-link>
+									&nbsp;
+									</template>
+									<el-link v-if="form.sd[4].length<3" type="primary" @click="add(4)">+新增时段</el-link>
+								</td>
+							</tr>
+							<tr>
+								<td>星期六</td>
+								<td>
+									<template v-for="(item,idx) in form.sd[5]">
+									<el-select  v-model="item[0]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									至
+									<el-select  v-model="item[1]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									<el-link v-if="idx>0" type="primary" @click="del(5,idx)">删除</el-link>
+									&nbsp;
+									</template>
+									<el-link v-if="form.sd[5].length<3" type="primary" @click="add(5)">+新增时段</el-link>
+								</td>
+							</tr>
+							<tr>
+								<td>星期日</td>
+								<td>
+									<template v-for="(item) in form.sd[6]">
+									<el-select  v-model="item[0]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									至
+									<el-select  v-model="item[1]" clearable placeholder="请选择">
+										<el-option v-for="item in form.times" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+									<el-link v-if="idx>0" type="primary" @click="del(6,idx)">删除</el-link>
+									&nbsp;
+									</template>
+									<el-link v-if="form.sd[6].length<3" type="primary" @click="add(6)">+新增时段</el-link>
+								</td>
+							</tr>
+						</table>
+
+					</el-form-item>
+
+					<el-form-item label="付款方式" prop="fkfs">
+						<el-radio-group v-model="form.fkfs">
+							<el-radio-button label="按展示付费(oCPM)"></el-radio-button>
+							<el-radio-button label="按转化付费(CPA)"></el-radio-button>
+						</el-radio-group>
+
+					</el-form-item>
+				</template>
+				<template v-if="form.tfmb =='点击量'">
+					<el-form-item label="出价方案" prop="cjfa">
+						<el-radio-group v-model="form.cjfa">
+							<el-radio-button label="手动"></el-radio-button>
+							<el-radio-button label="自动" disabled></el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="投放方式" prop="tffs">
+						<el-radio-group v-model="form.tffs">
+							<el-radio-button label="标准投放(推荐)"></el-radio-button>
+							<el-radio-button label="加速投放"></el-radio-button>
+
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="付款方式" prop="fkfs">
+						<el-radio-group v-model="form.fkfs">
+							<el-radio-button label="按点击付费(CPC)"></el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+				</template>
+				<template v-if="form.tfmb =='展示量'">
+						<el-form-item label="出价方案" prop="cjfa">
+						<el-radio-group v-model="form.cjfa">
+							<el-radio-button label="手动"></el-radio-button>
+							<el-radio-button label="自动" disabled></el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="投放方式" prop="tffs">
+						<el-radio-group v-model="form.tffs">
+							<el-radio-button label="标准投放(推荐)"></el-radio-button>
+							<el-radio-button label="加速投放"></el-radio-button>
+					
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="付款方式" prop="fkfs">
+						<el-radio-group v-model="form.fkfs">
+							<el-radio-button label="按展示付费(CPM)"></el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+				</template>
+				<el-form-item :label="form.tfmb=='转化量'?'目标转化出价':(form.tfmb=='点击量'?'点击出价':'展现出价')" prop="mbzh">
+					<el-input style="width:300px;" placeholder="请输入出价" v-model="form.mbzh" class="input-with-select">
+						<span slot="append">元</span>
+					</el-input>
+				</el-form-item>
+
+				<el-row style="margin-bottom: 100px;">
+					<el-button @click="back();">取消</el-button>
+					<el-button type="primary" @click="save(1);">保存并关闭</el-button>
+					<el-button type="primary" @click="save(2);">保存并新建创意</el-button>
+				</el-row>
+			</el-form>
+		</div>
+	</body>
+</html>
+<style>
+	
+	.titl {
+
+		height: 2rem;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.el-select .el-input {
+		width: 130px;
+	}
+
+	.input-with-select .el-input-group__append {
+		background-color: #fff;
+	}
+
+	.el-checkbox-button:after {
+		content: "";
+		position: absolute;
+		right: 1px;
+		top: -2px;
+		width: 0;
+		height: 0;
+		border-top: 6px solid transparent;
+		border-bottom: 6px solid transparent;
+		border-left: 6px solid #dadfe3;
+		-webkit-transform: rotate(-45deg);
+		transform: rotate(-45deg);
+		border-radius: 2px;
+	}
+
+	.noAng:after {
+
+		border: 0;
+
+		border-radius: 0px;
+	}
+
+	.el-checkbox-button.is-checked:after,
+	.el-checkbox-button:active:after,
+	.el-checkbox-button:hover:after {
+		border-left: 6px solid #2f88ff;
+	}
+
+	.box-card {
+		width: 250px;
+	}
+
+	.el-card__header {
+		padding: 0;
+	}
+
+	.el-card__body {
+		padding: 0px 5px;
+		height: 135px;
+		overflow-y: scroll;
+	}
+
+	.el-tag__close {
+		float: right;
+		top: 7px !important;
+	}
+	.el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap>.el-form-item__label:before, .el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before {
+    content: '·';
+    color: #F56C6C;
+    position: sticky;
+    left: 128px;
+    font-size: 12px;
+    font-weight: bolder;
+}
+</style>

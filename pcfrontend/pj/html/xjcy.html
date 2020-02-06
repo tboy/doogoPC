@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>新建创意</title>
+		<link href="../js/elementui/theme-chalk/index.css" rel="stylesheet" />
+		<link href="../css/page-forminfo.css" rel="stylesheet" />
+		<script src="../js/jquery.min.js"></script>
+		<script src="../js/elementui/vue.js"></script>
+		<script src="../js/elementui/index.js"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=LX2BZ-XEXC4-R4GUF-XF6QZ-PGDKO-OIBOD"></script>
+		<script src="../js/qqMapConfig-a.js"></script>
+		<script src="../js/city-picker/city-data.js"></script>
+		<script src="../js/UploadBase64FreeAll.js"></script>
+		<script src="xjcyData.js"></script>
+		<script src="xjcy.js"></script>
+	</head>
+	<body style="opacity:0;">
+		<div class="myContent" id="ct">
+			<div class="top_title" style="margin-left: 30px;">{{editOrAdd}}</div>
+			<div class="subTitl" style=" margin-left: 30px;margin-top: 10px;font-size: 15px;">所属广告计划oCPM精准引流/ABTest(123123093423423)</div>
+			<el-form style="width:95%;margin:auto;" ref="form" :model="form" :rules="rules" label-position='left' label-width="120px">
+				<div class="titl">设置投放位置</div>
+				<el-form-item label="广告位" prop="ggw">
+					<el-radio-group v-model="form.ggw">
+						<el-radio-button label="按媒体指定位置"></el-radio-button>
+					</el-radio-group>
+					<el-card class="box-card">
+						<div slot="header" class="clearfix" style="padding:5px;">
+							<span>已选</span>
+						</div>
+						<el-checkbox-group v-model="form.mts">
+							<el-checkbox label="今日头条">
+							</el-checkbox>
+					</el-card>
+				</el-form-item>
+				<div class="titl">制作创意</div>
+				<el-form-item label="创意内容" prop="cynr">
+
+					<el-button v-if="form.cynr == ''" @click="upLoadFile('cynr');">上传图片</el-button>
+					<img style="width: 300px;border: 1px solid #ccc;padding: 5px;border-radius: 5px;" @click="upLoadFile('cynr');"
+					 v-if="form.cynr!=''" :src="form.cynr"></img>
+					<input style="display:none;" accept=".jpg,.png" type="file" id="file" />
+					<div style="width:100%;">
+						建议最佳：宽高比 16：9，1280*720≤尺寸≤2560*1440.
+					</div>
+					<div style="width:100%;margin-top:-10px;">
+						支持JPG、PNG等图片格式
+					</div>
+				</el-form-item>
+				· <el-form-item label=" 创意标题" prop="cybt">
+					<el-input maxlength="30" show-word-limit style="width:300px;" placeholder="请输入标题" v-model="form.cybt"></el-input>
+				</el-form-item>
+				<el-form-item label="来源" prop="ly">
+					<el-input maxlength="10" show-word-limit style="width:300px;" placeholder="请输入来源" v-model="form.ly"></el-input>
+					<div style="width:100%;">来源即广告来源，展示在广告左下角，修改来源触发审核，来源需与公司</div>
+					<div style="width:100%;margin-top:-10px;">名称或公司名称简称保持一致</div>
+				</el-form-item>
+				<el-form-item label="广告头像" prop="ggtx">
+					<el-button v-if="form.ggtx == ''" @click="upLoadFile('');">上传图片</el-button>
+					<img @click="upLoadFile('');" style="width: 70px;height:70px;border: 1px solid #ccc;padding: 5px;border-radius: 5px;"
+					 v-if="form.ggtx!=''" :src="form.ggtx"></img>
+				</el-form-item>
+				<div class="titl">创意分类</div>
+				<el-form-item label="创意分类" prop="cyfl">
+					<el-cascader style="width:300px;" v-model="form.cyfl" :options="form.cyfls"></el-cascader>
+				</el-form-item>
+				<el-form-item label="创意标签" prop="cybq">
+					<el-input @keyup.enter.native.prevent="addBQ();" style="width:450px;" maxlength="10" show-word-limit placeholder="最多20个标签，每个不超过10个字，可空格分隔"
+					 v-model="form.bq">
+						<template slot="append">
+							<el-button @click="addBQ();">添加（回车键）</el-button>
+						</template>
+					</el-input>
+					<el-card class="box-card">
+						<div slot="header" class="clearfix" style="padding:5px;">
+							<span>已选</span>
+							<el-button style="float: right;" type="text" onClick="javascript:app.$data.form.cybq=[];app.$data.form.cybq.sort();">清空</el-button>
+						</div>
+						<el-tag style="width:100%;" v-for="(bq,idx) in form.cybq" :key="idx" :disable-transitions="false" type="info"
+						 closable @close="delBq(idx)">
+							{{bq}}
+						</el-tag>
+
+					</el-card>
+				</el-form-item>
+
+
+				<el-row style="margin-bottom: 100px;">
+					<el-button @click="back();">取消</el-button>
+					<el-button type="primary" @click="save(1);">保存并关闭</el-button>
+				</el-row>
+			</el-form>
+		</div>
+	</body>
+</html>
+<style>
+	.titl {
+
+		height: 2rem;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.el-select .el-input {
+		width: 130px;
+	}
+
+	.input-with-select .el-input-group__append {
+		background-color: #fff;
+	}
+
+	.el-checkbox-button:after {
+		content: "";
+		position: absolute;
+		right: 1px;
+		top: -2px;
+		width: 0;
+		height: 0;
+		border-top: 6px solid transparent;
+		border-bottom: 6px solid transparent;
+		border-left: 6px solid #dadfe3;
+		-webkit-transform: rotate(-45deg);
+		transform: rotate(-45deg);
+		border-radius: 2px;
+	}
+
+	.noAng:after {
+
+		border: 0;
+
+		border-radius: 0px;
+	}
+
+	.el-checkbox-button.is-checked:after,
+	.el-checkbox-button:active:after,
+	.el-checkbox-button:hover:after {
+		border-left: 6px solid #2f88ff;
+	}
+
+	.box-card {
+		width: 300px;
+		margin-top: 10px !important;
+	}
+
+	.el-card__header {
+		padding: 0;
+	}
+
+	.el-card__body {
+		padding: 0px 5px;
+		height: 135px;
+		overflow-y: scroll;
+	}
+
+	.el-tag__close {
+		float: right;
+		top: 7px !important;
+	}
+
+	.el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap>.el-form-item__label:before,
+	.el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before {
+		content: '·';
+		color: #F56C6C;
+		position: sticky;
+		left: 128px;
+		font-size: 12px;
+		font-weight: bolder;
+	}
+</style>
